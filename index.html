@@ -336,6 +336,34 @@ body.notes #notes{transform:none}
 }
 #mnav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:40;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#120A24;border-top:1px solid #2A2142}
 #mnav button{flex:1;font:700 16px Figtree,sans-serif;background:#241A3B;color:#fff;border:0;border-radius:12px;padding:14px}
+
+/* channel plan */
+.chgrid{display:grid;grid-template-columns:1fr 380px;gap:56px;margin-top:30px}
+.ctab .row{display:grid;grid-template-columns:160px 210px 1fr;gap:14px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.ctab .row.h{border-bottom:2px solid var(--navy);padding-top:0;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.ctab .t{font-family:var(--serif);font-size:21px}
+.ctab .w{font-size:16px;color:var(--mute)}
+.ctab .x{font-size:17.5px;line-height:1.35}
+.ctab .x b{display:inline-block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--purple);margin-right:8px;font-weight:800}
+.ctab .row.hl .t{color:var(--purple);font-style:italic}
+.email{background:#fff;box-shadow:0 18px 40px rgba(22,5,53,.14);border-radius:10px;overflow:hidden;font-size:13px;color:#2A2238}
+.email .top{background:#F3F0EA;padding:12px 16px;font-size:11.5px;color:#5F5872;line-height:1.6;border-bottom:1px solid #E6E0D6}
+.email .top b{color:var(--navy)}
+.email .bd{padding:18px 20px 20px}
+.email .lg{font-size:15px;color:var(--navy);margin-bottom:14px}.email .lg b{font-weight:800}
+.email h5{font-family:var(--serif);font-weight:400;font-size:26px;margin:0 0 10px;color:var(--navy);letter-spacing:-.4px}
+.email p{margin:0 0 10px;line-height:1.5}
+.email .btn{display:inline-block;background:var(--navy);color:#fff;font-weight:700;padding:10px 18px;border-radius:999px;margin:4px 0 12px}
+.email .ft{font-size:10.5px;color:#6B6380;border-top:1px solid #EEE;padding-top:10px}
+/* signal → diagnosis → next move */
+.nm .row{display:grid;grid-template-columns:200px 180px 1fr;gap:14px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.nm .row.h{border-bottom:2px solid var(--navy);padding-top:0;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.nm .s{font-size:15.5px;color:var(--mute)}
+.nm .d{font-family:var(--serif);font-size:19px}
+.nm .m{font-size:15.5px;line-height:1.35}
+.nm .row.stop .d{color:var(--warn);font-style:italic}
+.worked{border-top:1px solid var(--line);padding-top:14px;max-width:1100px;font-size:15.5px;color:var(--mute);line-height:1.5}
+.worked b{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);margin-right:10px}
 </style>
 </head>
 <body>
@@ -447,8 +475,43 @@ body.notes #notes{transform:none}
     </div>
   </div>
   <div class="jfoot">
-    <div class="q">Six months is the <em>measurement window</em>, not six months of scheduled marketing.</div>
+    <div class="q">Behaviour sets the pace. <em>The target sets the deadline.</em></div>
     <span class="tag"><i>Guardrail</i> Silent: max 3 proactive contacts, then long-term lifecycle</span>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Part 1 · Engaging cold customers</span></div>
+</section>
+
+<!-- ═══════════ 3b · CHANNELS ═══════════ -->
+<section class="slide" data-title="Part 1 · Six months, channel by channel">
+  <div class="kicker"><span class="pill">Part 1</span> What we actually build</div>
+  <h1>Six months, <em>channel by channel.</em></h1>
+  <div class="chgrid">
+    <div class="ctab">
+      <div class="row h"><span>When</span><span>Who</span><span>Experience</span></div>
+      <div class="row hl"><span class="t">Week 0</span><span class="w">All eligible</span><span class="x"><b>Post</b>Will Storage Statement → Will Check</span></div>
+      <div class="row"><span class="t">Days 2–5</span><span class="w">Email permission</span><span class="x"><b>Email</b>Reinforce the statement + digital Will Check</span></div>
+      <div class="row"><span class="t">Always on</span><span class="w">Anyone who responds</span><span class="x"><b>Phone · Web</b>Complete the Will Check, capture today's need</span></div>
+      <div class="row"><span class="t">From first response</span><span class="w">Ready</span><span class="x"><b>Consultant</b>Handoff within the agreed SLA · SMS/email to confirm only</span></div>
+      <div class="row"><span class="t">Weeks 1–8</span><span class="w">Interested</span><span class="x"><b>Email · Post</b>1–2 follow-ups built on their need, postal alternative</span></div>
+      <div class="row"><span class="t">~Week 6</span><span class="w">Silent</span><span class="x"><b>Post + Email</b>A new proposition, not a reminder</span></div>
+      <div class="row"><span class="t">Months 3–5</span><span class="w">Still silent / partly engaged</span><span class="x">A final low-friction ask, shaped by what we've learned</span></div>
+      <div class="row"><span class="t">Month 6</span><span class="w">Everyone</span><span class="x">Converted → customer lifecycle · engaged → nurture · silent → rest</span></div>
+      <div style="margin-top:16px"><span class="tag"><i>Starting cadence</i> Timings are test hypotheses, not fixed truth</span></div>
+    </div>
+    <div>
+      <div class="email zoomable">
+        <div class="top"><b>From:</b> Octopus Legacy<br><b>Subject:</b> Your Will Storage Statement has arrived<br><b>Preview:</b> Your will is safe, and storage is still free.</div>
+        <div class="bd">
+          <div class="lg"><b>octopus</b> legacy</div>
+          <h5>Your will, 13 years on</h5>
+          <p>Hi Margaret, your will remains safely stored with us, and storage is still free.</p>
+          <p>If you'd like to check your plans still reflect your life today, it takes about three minutes.</p>
+          <span class="btn">Check my plans</span>
+          <div class="ft">Not sure this is really us? Don't click. Go to octopuslegacy.com yourself and quote OL-4821-3307.</div>
+        </div>
+      </div>
+      <div class="hand" style="font-size:24px;color:var(--purple);margin-top:16px;line-height:1.15">↑ The email backs up the letter. It never replaces it.<br>SMS only confirms callbacks. A cold text about your will looks like a scam.</div>
+    </div>
   </div>
   <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Part 1 · Engaging cold customers</span></div>
 </section>
@@ -468,20 +531,21 @@ body.notes #notes{transform:none}
       <div class="assume"><b>ASSUMPTION</b>Conversion means a paid estate-planning purchase within the six-month window, to be aligned with the business definition.</div>
     </div>
     <div>
-      <div class="lbl">Where the chain breaks tells us what to fix</div>
+      <div class="lbl">Where the chain breaks tells us what to do next</div>
       <div class="funnel"><div class="fs"><i>1</i>Statement</div><div class="fs"><i>2</i>Will Check</div><div class="fs"><i>3</i>Need found</div><div class="fs"><i>4</i>Consultant</div><div class="fs"><i>5</i>Purchase</div></div>
-      <div class="diag">
-        <div class="dg"><small>Few Will Checks</small><b>Proposition</b></div>
-        <div class="dg"><small>Checks, no handoff</small><b>Trust / CTA</b></div>
-        <div class="dg"><small>Handoffs, no purchase</small><b>Product / price / sales</b></div>
-        <div class="dg stop"><small>No lift vs holdout</small><b>Stop and rethink</b></div>
+      <div class="nm">
+        <div class="row h"><span>Signal</span><span>Diagnosis</span><span>Next move</span></div>
+        <div class="row"><span class="s">Few Will Checks</span><span class="d">Proposition / friction</span><span class="m">Test a different reason to engage. Simplify the ask and the channel.</span></div>
+        <div class="row"><span class="s">Checks, no handoff</span><span class="d">Trust / handoff</span><span class="m">Lower-friction callback, and a clearer "what happens next"</span></div>
+        <div class="row"><span class="s">Handoffs, no purchase</span><span class="d">Product / price / sales</span><span class="m">Analyse objections with consultants. Change the experience on evidence.</span></div>
+        <div class="row stop"><span class="s">No incremental lift</span><span class="d">No value created</span><span class="m">Test another proposition or cohort. Stop if the economics don't justify it.</span></div>
       </div>
-      <div class="lbl" style="margin-top:44px">Path to 35%</div>
+      <div class="lbl" style="margin-top:30px">Path to 35%</div>
       <div class="scale">
         <div class="sc"><b>Pilot</b><span>Matched to capacity</span></div><div class="sc-ar">→</div>
         <div class="sc"><b>Early read</b><span>Behavioural signals</span></div><div class="sc-ar">→</div>
         <div class="sc"><b>Full segment</b><span>If the evidence supports it</span></div><div class="sc-ar">→</div>
-        <div class="sc"><b>Next cohorts</b><span>Proposition &amp; channel adapted</span></div><div class="sc-ar">→</div>
+        <div class="sc"><b>Adjacent cohorts</b><span>Designed in parallel, not after month 6</span></div><div class="sc-ar">→</div>
         <div class="sc goal" style="flex-direction:column">35%<small style="font-family:Figtree;font-style:normal;font-size:12.5px;color:var(--mute);margin-top:4px">across the base</small></div>
       </div>
     </div>
@@ -667,28 +731,6 @@ body.notes #notes{transform:none}
   <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>The customer writes the most important words. Each card ID is non-sensitive and never encodes role or estate.</span></div>
 </section>
 
-<!-- ═══════════ 9 · AI ═══════════ -->
-<section class="slide" data-title="How I used AI">
-  <div class="kicker">One last thing</div>
-  <h1>AI as challenger, <em>not decision-maker.</em></h1>
-  <p class="sub">I used two models to generate options and challenge assumptions. The final decisions were mine.</p>
-  <div class="aigrid">
-    <div>
-      <div class="aihead"><span>Topic</span><span>AI proposed</span><span></span><span>I decided</span></div>
-      <div class="airow"><b>Sizing</b><span class="ai">~90k cohort from %s not in the brief</span><span class="ar">→</span><span class="me">Only ~245k, from the brief</span></div>
-      <div class="airow"><b>Segment</b><span class="ai">Mirror-will couples as the core</span><span class="ar">→</span><span class="me">A priority signal, written to individually</span></div>
-      <div class="airow"><b>Personalisation</b><span class="ai">Use everything the will tells us</span><span class="ar">→</span><span class="me">A sensitivity hierarchy, with some data left out</span></div>
-      <div class="airow"><b>Operations</b><span class="ai">"48 hours", "4–6 weeks"</span><span class="ar">→</span><span class="me">Agreed SLAs and test hypotheses</span></div>
-    </div>
-    <div class="aiside">
-      <div class="blk ok"><h4>Where it helped</h4><ul><li>Lots of options, fast</li><li>Stress-testing assumptions</li><li>Q&amp;A preparation</li><li>Building this deck</li></ul></div>
-      <div class="blk no"><h4>Where it didn't</h4><ul><li>No knowledge of your data, ops or customers</li><li>Generic copy, invented numbers</li></ul></div>
-      <div class="me">Privacy, sensitivity and commercial trade-offs <em>needed human judgement.</em></div>
-    </div>
-  </div>
-  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Edou Mota · Lifecycle case study</span></div>
-</section>
-
 <!-- ═══════════ 10 · CLOSE ═══════════ -->
 <section class="slide" data-title="Close">
   <div class="wash w-amber" style="width:600px;height:480px;right:-140px;bottom:-200px"></div>
@@ -700,7 +742,8 @@ body.notes #notes{transform:none}
       <p class="big" style="font-size:72px;max-width:1300px">The data tells me what their life looked like. <em>The Will Check tells me what it looks like today.</em></p>
       <p class="sub" style="margin-top:34px;font-size:26px;font-family:var(--serif);font-weight:300;color:var(--navy)">And in Part 2, <i>the customer makes the introduction.</i></p>
     </div>
-    <div class="meta"><div>Questions<b>Over to you</b></div></div>
+    <div><div class="worked"><b>How I worked</b>AI for exploration, challenge, Q&amp;A prep and the build. My judgement on segmentation, privacy, measurement and the final calls.</div>
+    <div class="meta" style="margin-top:22px"><div>Questions<b>Over to you</b></div></div></div>
   </div>
   <div class="foot"><span></span><span class="wm"><b>octopus</b> legacy</span></div>
 </section>
@@ -716,8 +759,7 @@ body.notes #notes{transform:none}
 
 <script>
 /* ═════════ SPEAKER NOTES: t = seconds budget, land = the one thing, say = speech, qa = pocket ═════════ */
-const N=[
-{t:15,land:"One idea runs through both parts.",
+const N=[{t:15,land:"One idea runs through both parts.",
  say:`<p>Thanks so much for having me. So, I've kind of approached both parts of the brief around one idea, which is basically <em>earning the right to the next conversation</em>.</p><p>I'll walk you through the choices I made first, then what I'd actually put in front of customers, and then how I'd know if it's working or not. And then, yeah, happy to dig into anything.</p>`,
  qa:[]},
 
@@ -736,8 +778,8 @@ const N=[
  ["How do you get 245k?","60% are over 65 and 25% are over 75, so 35% are 65–74, which is ~245k of 700k. That assumes the bands are nested, as they read."],
  ["Why one segment when 35% is the goal?","The brief asks for one. More importantly, one well-measured cohort gives us a playbook to scale. That's the next slide but one."]]},
 
-{t:180,land:"The Will Check is the brain of the journey.",
- say:`<p>So, the biggest limitation in the data is that it tells me what someone's life looked like <strong>when they wrote the will</strong>. Not what it looks like today.</p><p>So I don't want CRM to sort of guess which product they need. I'd rather give them a reason to tell us.</p><p>And that's basically what the Will Check does. <em>The Will Check is kind of the brain of the journey.</em> It turns old data into, like, current first-party information, and it sorts people quite quickly.</p><p>So if they're <strong>Ready</strong>, they've told us something's changed and they want help, they go straight to a consultant, within an agreed SLA, and we stop the marketing. If they're <strong>Interested</strong>, they've shown real intent but they're not there yet, so we follow up around the specific need or barrier they told us about.</p><p>If they're <strong>Silent</strong>, we change the proposition, give them a couple more chances, max three, and then we stop. We don't keep chasing. And <strong>Protect</strong>: if someone complains or opts out, that overrides everything.</p><p>So behaviour sets the pace. The six months is really the <em>measurement window</em>. It's not six months of scheduled marketing.</p>`,
+{t:150,land:"The Will Check is the brain of the journey.",
+ say:`<p>So, the biggest limitation in the data is that it tells me what someone's life looked like <strong>when they wrote the will</strong>. Not what it looks like today.</p><p>So I don't want CRM to sort of guess which product they need. I'd rather give them a reason to tell us.</p><p>And that's basically what the Will Check does. <em>The Will Check is kind of the brain of the journey.</em> It turns old data into, like, current first-party information, and it sorts people quite quickly.</p><p>So if they're <strong>Ready</strong>, they've told us something's changed and they want help, they go straight to a consultant, within an agreed SLA, and we stop the marketing. If they're <strong>Interested</strong>, they've shown real intent but they're not there yet, so we follow up around the specific need or barrier they told us about.</p><p>If they're <strong>Silent</strong>, we change the proposition, give them a couple more chances, max three, and then we stop. We don't keep chasing. And <strong>Protect</strong>: if someone complains or opts out, that overrides everything.</p><p>So behaviour sets the pace, but <em>the target sets the deadline</em>. I'm not waiting six months to learn. I'm using the six months to deliver, optimise and measure, all at the same time.</p>`,
  qa:[["Why post-led?","Post reaches nearly everyone. Email covers ~45% and skews under-70. It's a physical document about a physical document. Digital backs it up where we have permission."],
  ["Would you treat an email open as intent?","No. Opens are noise, and Apple Mail Privacy Protection inflates them. Intent means a started or completed Will Check, a callback request, a reply card, a call, or repeated meaningful site behaviour."],
  ["What's the SLA?","Hours or a few days, never weeks. I'd agree the number with the consultant team based on capacity and current conversion data rather than invent one."],
@@ -749,10 +791,15 @@ const N=[
  ["What's the Will Check physically?","Online: the full five-question check. Phone: an adviser walks through the same questions. Reply card: a deliberately lighter hand-raise, with the adviser completing the check on the callback. Nobody fills in a questionnaire on a postcard."],
  ["Future triggers?","Address changes and returned post are safe to use. Verified life-event triggers only where data and permissions have been checked. I wouldn't automate sensitive events."]]},
 
+{t:75,
+ land:"It's not six months of post. Post leads, email backs it up, phone and web are always on.",
+ say:`<p>So, I wanted to show what we actually build, because it's not just post for six months.</p><p>Week zero, everyone gets the <strong>letter</strong>. That's the hero. Then, a few days later, if we have email permission, they get an <strong>email</strong> that kind of backs up the letter, same message, with a direct link to the Will Check. It backs up the post, it doesn't replace it.</p><p>Phone and web are <strong>always on</strong>, so whenever someone responds, we capture what's changed for them today.</p><p>If they're Ready, it goes straight to a consultant within the SLA. And honestly, I'd only use SMS to confirm callbacks. A random text about your will looks like a scam to this age group.</p><p>Interested people get one or two follow-ups built on the need they told us about, by email, or post if they don't have email. Silent people, around week six, get a <strong>new proposition</strong>, not just a reminder of the same thing. And then one last low-friction ask, shaped by what we've learned so far.</p><p>At month six everyone moves on: converted into the customer lifecycle, engaged into nurture, and silent ones rest until the next statement.</p><p>And these timings are a <em>starting cadence</em>. They're hypotheses I'd test, not, you know, fixed truth.</p>`,
+ qa:[["Why email at all, if post is the hero?","About 45% have email, mostly under-70s, which overlaps our cohort. It's cheap reinforcement and a one-tap route to the Will Check. It follows the letter so the letter is the trusted first touch."],["Why not SMS?","Only ~20% have mobile, and an unexpected text about your will is a classic scam pattern for this age group. SMS for transactional confirmation only."],["Why ~week 6 for the second letter?","Time for the first letter to land, responses to come in and the early read to inform it. It's a starting hypothesis I'd test, not a known optimum."],["Paid media / retargeting?","Not in the first version. Owned channels and permissions first. I'd only consider it for permissioned audiences once the core journey proves lift."]]},
+
 {t:120,land:"If engagement looks great but there's no incremental lift, I haven't succeeded.",
- say:`<p>OK, so the goal is going from 20 to 35%. So I don't just want to report that people who got my journey converted. I want to know they converted <strong>because of</strong> it.</p><p>So I'd keep a holdout on today's experience, and the north star is <strong>incremental</strong> conversion: treatment minus holdout. I'm assuming conversion means a paid purchase in the six-month window. Obviously that's something I'd align with the team on day one.</p><p>But I wouldn't wait six months to learn. This funnel kind of tells me early where it's breaking. If no one's doing the Will Check, that's a proposition problem. If they do it but don't want to talk to us, it's more about trust and the handoff. And if we're getting good appointments but no sales, then honestly, another CRM message isn't going to fix that. I'd take the evidence to Sales and Product and work through it together.</p><p>And just to be clear, this cohort is the <strong>proving ground</strong>, not the whole answer to 35%. I wouldn't take one result and assume it works for all 700,000. The 35% is across the base, through the next cohorts.</p><p>And if engagement looks amazing but there's no lift against the holdout, then, yeah, I haven't succeeded. We change it or we stop.</p>`,
- qa:[["Keep these two questions separate","Can this journey take this cohort from 20 to 35%? The experiment answers that. Can the programme take the 700k base to 35%? Scaling answers that. Never imply one from the other."],
- ["How big is the holdout?","Sized from the eligible audience, the baseline, and the smallest effect we'd consider commercially meaningful. Calculated once the cohort size is validated, not an arbitrary 10%. <b>Sense check:</b> detecting ~3 points absolute from a 20% baseline needs roughly 3,000 per arm at conventional power. So the test can detect far smaller movement than the +15 point ambition, and the holdout can stay small."],
+ say:`<p>OK, so the goal is going from 20 to 35%. So I don't just want to report that people who got my journey converted. I want to know they converted <strong>because of</strong> it.</p><p>So I'd keep a holdout on today's experience, and the north star is <strong>incremental</strong> conversion: treatment minus holdout. I'm assuming conversion means a paid purchase in the six-month window. Obviously that's something I'd align with the team on day one.</p><p>But I wouldn't wait six months to learn. This funnel kind of tells me early where it's breaking. If no one's doing the Will Check, that's a proposition problem. If they do it but don't want to talk to us, it's more about trust and the handoff. And if we're getting good appointments but no sales, then honestly, another CRM message isn't going to fix that. I'd take the evidence to Sales and Product and work through it together.</p><p>And just to be clear, this cohort is the <strong>proving ground</strong>, not the whole answer to 35%. I wouldn't take one result and assume it works for all 700,000. The 35% is across the base, so I'd be designing the next cohorts in parallel, not waiting until month six.</p><p>And for each place it breaks, there's a next move. So if no one does the Will Check, I'd test a genuinely different reason to engage, not just tweak the copy. If they do it but don't hand off, I'd make the callback easier and be clearer about what happens next. If there's no lift at all, we test another proposition or cohort, or we stop if the economics don't justify it.</p><p>And yeah, the holdout does have an opportunity cost, so I'd keep it only as big and as long as we need to get a reliable answer.</p><p>And if engagement looks amazing but there's no lift against the holdout, then I haven't succeeded.</p>`,
+ qa:[["Can this one cohort get the business to 35%?","Not on its own, even in the best case. The brief asks me to design one segment, so that's what I've done. If 35% is a portfolio-level six-month target, adjacent cohorts would be sized and designed in parallel. I wouldn't pretend one cohort can deliver the whole portfolio movement."],["Will you release the holdout early?","Not automatically. It would weaken the six-month comparison. If commercial pressure demanded it, a phased or stepped rollout is an option, but I'd agree that design up front."],["Keep these two questions separate","Can this journey take this cohort from 20 to 35%? The experiment answers that. Can the programme take the 700k base to 35%? Scaling answers that. Never imply one from the other."],
+ ["How big is the holdout?","I'd size it once I know the eligible cohort, its baseline and the smallest effect we'd consider commercially meaningful. 245k is before the will-age and homeowner filters, so I won't put a number on it yet. It has an opportunity cost, so: only as large and as long as we need for a reliable counterfactual."],
  ["Why hold anyone out with an aggressive target?","Without a comparison group I can't tell whether we created conversion or just claimed customers who'd have bought anyway. The holdout is only as large and lasts only as long as we need to learn reliably."],
  ["Why not all 700k now?","I'd be spending money, consultant capacity and trust before knowing which proposition works. Learn fast on a commercially meaningful audience, then scale fast from evidence."],
  ["When is the first read?","Operational and behavioural signals monitored from day one. A first structured review at around 6 weeks is a decision point, not a statistical promise. The cadence depends on response volume and how long purchases take."],
@@ -794,17 +841,13 @@ const N=[
  ["Why lead with no offer?","A discount on the first contact would turn an introduction from a loved one into a sales lead. The family benefit (10% Classic / 20% Premier) appears only after they engage."],
  ["Can you say 'you won't be added to marketing'?","That line needs privacy and legal sign-off, but it addresses the elephant in the room, so I'd fight to keep it."]]},
 
-{t:60,land:"Useful for speed. Weak on judgement. The decisions were mine.",
- say:`<p>So, on AI. I did use it a lot, but mainly as a <strong>challenger</strong>. I'd generate options and then actively try to break them.</p><p>A good example: early on it gave me this very confident 90,000-person audience by multiplying percentages that aren't even in the brief. We caught that and I took it out.</p><p>So it was really useful for speed and for pressure-testing. But it was much worse at things like privacy judgement, how operations actually work, and knowing when <em>not</em> to use data. Those decisions were mine.</p>`,
- qa:[["How long did you spend?","⚠ <b>Answer honestly with your real time.</b> Don't claim 4 hours if it isn't true. Separate AI-assisted exploration from actual case-study production, accurately."],
- ["Would you use AI in the role?","Yes: for generating variants, QA of journeys and copy against brand and compliance checklists, first drafts of analysis, and challenging plans. Not for final customer copy in a category this sensitive without human and content review."],
- ["Did AI write the copy?","First drafts, yes. The decisions in it (what not to say, what data not to use, the scam-proof footer) came from challenging it."]]},
-
-{t:10,land:"Stop talking. Invite questions.",
- say:`<p>So yeah, that's basically the thinking behind both parts. Use the relationship and the data we already have, but <strong>don't overreach</strong> with either. Give the customer a useful reason to take the next step, see what they tell us and what they do, and earn the next conversation from there.</p><p>Happy to dig into any of it.</p><p><span style='color:#8C80A8'>(Then stop and let them talk.)</span></p><p style="margin-top:18px"><strong>Questions for them (pick 3):</strong></p>
+{t:45,land:"Stop talking. Invite questions.",
+ say:`<p>So yeah, that's basically the thinking behind both parts. Use the relationship and the data we already have, but <strong>don't overreach</strong> with either. Give the customer a useful reason to take the next step, see what they tell us and what they do, and earn the next conversation from there.</p><p>And just because the brief asked about AI: I used it pretty heavily, but as a <strong>challenger</strong>. Generating alternatives, pressure-testing the journey, and helping build the deck. It also confidently made things up a few times, like audience sizes and timings, so I challenged those instead of treating them as truth. The segmentation, the privacy choices, the measurement and the final calls, those are mine.</p><p>Happy to dig into any of it.</p><p><span style='color:#8C80A8'>(Then stop and let them talk.)</span></p><p style="margin-top:18px"><strong>Questions for them (pick 3):</strong></p>
 <p>1. You said lifecycle hasn't really been owned until now. What would you most want this person to change first?<br>2. What's already been tried with acquired customers, and what did you learn?<br>3. As the function grows, how do you see lifecycle working with Brand, Creative, Product and Data?<br>4. Can we trigger from offline moments today, like appointments, box delivery or returned post?<br>5. Who would I work most closely with on copy and content?</p>
 <p><strong>⚠ Never say "Octopus Energy". It's Octopus Group.</strong></p>`,
- qa:[]}
+ qa:[["How long did you spend?","⚠ <b>Answer honestly with your real time.</b> Don't claim 4 hours if it isn't true. Separate AI-assisted exploration from actual case-study production, accurately."],
+ ["Would you use AI in the role?","Yes: for generating variants, QA of journeys and copy against brand and compliance checklists, first drafts of analysis, and challenging plans. Not for final customer copy in a category this sensitive without human and content review."],
+ ["Did AI write the copy?","First drafts, yes. The decisions in it (what not to say, what data not to use, the scam-proof footer) came from challenging it."]]}
 ];
 
 /* ═════════ fake-but-plausible QR codes ═════════ */
