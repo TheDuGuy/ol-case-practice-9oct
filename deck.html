@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Octopus Legacy · Lifecycle case study · Edou Mota</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<style>
+@font-face{font-family:Figtree;src:url(fonts/Figtree-400.ttf);font-weight:400}
+@font-face{font-family:Figtree;src:url(fonts/Figtree-500.ttf);font-weight:500}
+@font-face{font-family:Figtree;src:url(fonts/Figtree-600.ttf);font-weight:600}
+@font-face{font-family:Figtree;src:url(fonts/Figtree-700.ttf);font-weight:700}
+@font-face{font-family:Figtree;src:url(fonts/Figtree-800.ttf);font-weight:800}
+@font-face{font-family:JBM;src:url(fonts/JetBrainsMono-500.ttf);font-weight:500}
+@font-face{font-family:'Caveat';src:url(fonts/Caveat-normal-500.woff2) format('woff2');font-weight:500}
+@font-face{font-family:'Caveat';src:url(fonts/Caveat-normal-700.woff2) format('woff2');font-weight:700}
+@font-face{font-family:'Fraunces';src:url(fonts/Fraunces-normal-300.woff2) format('woff2');font-style:normal;font-weight:300}
+@font-face{font-family:'Fraunces';src:url(fonts/Fraunces-normal-400.woff2) format('woff2');font-style:normal;font-weight:400}
+@font-face{font-family:'Fraunces';src:url(fonts/Fraunces-normal-600.woff2) format('woff2');font-style:normal;font-weight:600}
+@font-face{font-family:'Fraunces';src:url(fonts/Fraunces-italic-300.woff2) format('woff2');font-style:italic;font-weight:300}
+@font-face{font-family:'Fraunces';src:url(fonts/Fraunces-italic-400.woff2) format('woff2');font-style:italic;font-weight:400}
+:root{
+  /* measured from octopuslegacy.com CSS + OG imagery */
+  --navy:#160535; --purple:#7457E8; --purple-soft:#EFEBFC; --pink:#FFD9F2; --rose:#C9478F;
+  --cream:#F5EFE0; --paper:#FAF7F1; --white:#FFFEF9; --amber:#E4982B; --peach:#F2C9A0; --mist:#C9D7E1; --sage:#CFCDB6;
+  --mute:#6E6880; --line:rgba(22,5,53,.13); --ok:#2F8A62; --warn:#C2453C;
+  --serif:'Fraunces',Georgia,serif; --hand:'Caveat',cursive; --mono:JBM,ui-monospace,monospace;
+  --aub:#160535;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);font-family:Figtree,system-ui,sans-serif;color:var(--navy);overflow:hidden}
+#viewport{position:fixed;inset:0;right:var(--dock,0px);display:flex;align-items:center;justify-content:center;transition:right .25s}
+#stage{width:1600px;height:900px;position:relative;flex:none;transform-origin:center center}
+.slide{position:absolute;inset:0;display:none;padding:70px 90px 60px;background:var(--paper);overflow:hidden}
+.slide.active{display:block}
+.slide>*{position:relative}
+/* soft photographic washes, like the brand's out-of-focus family imagery */
+.wash{position:absolute!important;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none;z-index:0}
+.w-amber{background:var(--amber)}.w-peach{background:var(--peach)}.w-mist{background:var(--mist)}.w-sage{background:var(--sage)}.w-pink{background:#F4B9DA}
+
+.kicker{font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin-bottom:20px;display:flex;gap:14px;align-items:center}
+.kicker:before{content:'';width:34px;height:1.5px;background:var(--navy);opacity:.5}
+.kicker .pill{color:var(--purple)}
+h1{font-family:var(--serif);font-weight:300;font-size:62px;line-height:1.06;letter-spacing:-1.4px;margin:0 0 14px}
+h1 em{font-style:italic;color:var(--purple)}
+.sub{font-size:21px;color:var(--mute);margin:0;max-width:1000px;line-height:1.45}
+.foot{position:absolute!important;left:90px;right:90px;bottom:28px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#9A93A8}
+.wm{font-size:19px;letter-spacing:-.4px;color:var(--navy);font-weight:400}
+.wm b{font-weight:800}
+.tag{display:inline-flex;gap:10px;align-items:baseline;font-size:15px;color:var(--mute)}
+.tag i{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+.hand{font-family:var(--hand)}
+.rule{height:1px;background:var(--line)}
+
+/* ---- COVER / CLOSE ---- */
+.cover{display:flex;flex-direction:column;justify-content:space-between;height:100%}
+.cover .big{font-family:var(--serif);font-weight:300;font-size:104px;line-height:1;letter-spacing:-3px;max-width:1150px;margin:0}
+.cover .big em{font-style:italic;color:var(--purple)}
+.cover .meta{display:flex;gap:56px;font-size:15px;color:var(--mute)}
+.cover .meta b{display:block;color:var(--navy);font-size:20px;margin-top:4px;font-weight:600}
+.polaroid{position:absolute!important;background:#FFFEF9;padding:14px 14px 50px;box-shadow:0 18px 40px rgba(22,5,53,.16),0 2px 3px rgba(22,5,53,.08);z-index:2}
+.polaroid .ph{width:100%;height:100%;background-size:cover;background-position:center;filter:sepia(.25) saturate(.9)}
+.polaroid .cap{position:absolute;left:16px;right:16px;bottom:12px;font-family:var(--hand);font-size:24px;color:#3B3550;text-align:center}
+.ph-a{background:radial-gradient(circle at 30% 65%,#D9894A 0,transparent 45%),radial-gradient(circle at 70% 35%,#9DB4C4 0,transparent 50%),radial-gradient(circle at 55% 80%,#E7C79C 0,transparent 55%),#E9DCC6}
+.ph-b{background:radial-gradient(circle at 60% 60%,#C9A07A 0,transparent 45%),radial-gradient(circle at 25% 30%,#E6D3B5 0,transparent 55%),radial-gradient(circle at 80% 85%,#8FA3A8 0,transparent 45%),#DCCDB4}
+.ph-c{background:radial-gradient(circle at 40% 40%,#B8C8D2 0,transparent 50%),radial-gradient(circle at 70% 75%,#E2A86A 0,transparent 45%),#E8E0D0}
+
+/* ---- THESIS ---- */
+.thesis-cols{display:grid;grid-template-columns:1fr 1px 1fr;gap:64px;margin-top:70px}
+.thesis-cols .vr{background:var(--line)}
+.tcol .n{font-family:var(--serif);font-size:90px;font-weight:300;line-height:.8;color:var(--purple);margin-bottom:22px}
+.tcol .lab{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:10px}
+.tcol h3{font-family:var(--serif);font-weight:400;font-size:44px;margin:0 0 10px;letter-spacing:-.8px}
+.tcol .who{font-size:21px;color:var(--mute);margin-bottom:30px;line-height:1.45;max-width:520px}
+.tsteps{font-family:var(--serif);font-style:italic;font-weight:300;font-size:30px;color:var(--navy);line-height:1.3}
+.tsteps span{white-space:nowrap}
+.tsteps .sep{color:var(--amber);font-style:normal;margin:0 10px}
+.thesis-foot{position:absolute!important;left:90px;bottom:96px;font-family:var(--serif);font-size:34px;font-weight:300}
+.thesis-foot em{font-style:italic;color:var(--purple)}
+
+/* ---- SEGMENT ---- */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:40px}
+.sieve .lvl{display:flex;align-items:baseline;gap:22px;padding:14px 0;border-bottom:1px solid var(--line)}
+.sieve .lvl .num{font-family:var(--serif);font-weight:300;font-size:46px;letter-spacing:-1px;min-width:220px}
+.sieve .lvl .what{font-size:18px;color:var(--mute)}
+.sieve .lvl .what b{color:var(--navy);font-weight:600}
+.sieve .lvl.k .num{color:var(--purple)}
+.sieve .lvl.f .num{font-style:italic;color:#A49DB3;font-size:30px}
+.sieve .lvl.p .num{font-family:var(--hand);font-size:40px;color:var(--rose)}
+.sieve .l1{padding-left:0}.sieve .l2{padding-left:30px}.sieve .l3{padding-left:60px}.sieve .l4{padding-left:90px}.sieve .l5{padding-left:120px}
+.why{counter-reset:w}
+.why .w{display:grid;grid-template-columns:56px 1fr;gap:6px 14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.why .w:first-child{border-top:1px solid var(--line)}
+.why .w i{font-style:normal;font-family:var(--serif);font-size:20px;color:var(--amber);grid-row:span 2;padding-top:6px}
+.why .w b{font-family:var(--serif);font-weight:400;font-size:30px;letter-spacing:-.5px}
+.why .w span{font-size:17.5px;color:var(--mute);line-height:1.45}
+.wont{margin-top:30px;display:flex;gap:26px;align-items:baseline;flex-wrap:wrap}
+.wont .lab{font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--navy)}
+.wont span{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--mute);text-decoration:line-through;text-decoration-color:var(--amber);text-decoration-thickness:2px}
+
+/* ---- JOURNEY ---- */
+.maturity{display:grid;grid-template-columns:repeat(4,1fr);margin:30px 0 28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.maturity div{padding:14px 18px 14px 0;position:relative}
+.maturity div+div{padding-left:22px;border-left:1px solid var(--line)}
+.maturity div i{font-style:normal;font-family:var(--serif);color:var(--amber);font-size:15px;margin-right:6px}
+.maturity div b{font-size:17px;font-weight:700}
+.maturity div span{display:block;font-size:14.5px;color:var(--mute);margin-top:2px}
+.maturity div.nba b{color:var(--purple)}
+.jflow{display:grid;grid-template-columns:320px 50px 320px 50px 1fr;align-items:stretch}
+.jnode{padding:28px 28px;display:flex;flex-direction:column;justify-content:center}
+.jnode .st{font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+.jnode h4{font-family:var(--serif);font-weight:300;font-size:36px;line-height:1.08;margin:0 0 12px;letter-spacing:-.6px}
+.jnode p{margin:0;font-size:16px;line-height:1.45}
+.jn1{background:var(--navy);color:#fff}.jn1 .st{color:var(--peach)}.jn1 p{color:#CFC8DE}
+.jn2{background:var(--cream);color:var(--navy)}.jn2 .st{color:var(--purple)}.jn2 p{color:var(--mute)}
+.chips{font-size:14.5px;color:var(--navy);margin-top:14px;line-height:1.7}
+.chips span:not(:last-child):after{content:' · ';color:var(--amber)}
+.arrow{display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:30px;color:var(--amber)}
+.branches{display:grid;grid-template-rows:repeat(4,1fr);border-top:1px solid var(--line)}
+.br{display:grid;grid-template-columns:200px 1fr;align-items:center;gap:18px;border-bottom:1px solid var(--line);padding:0 4px}
+.br b{font-family:var(--serif);font-weight:400;font-size:25px;letter-spacing:-.3px;display:flex;align-items:center;gap:12px}
+.br b:before{content:'';width:10px;height:10px;border-radius:50%;flex:none}
+.br b small{display:block;font-family:Figtree;font-size:13px;color:var(--mute);letter-spacing:0}
+.br span{font-size:16.5px;line-height:1.4}
+.br.r b:before{background:var(--amber)}.br.i b:before{background:var(--purple)}.br.s b:before{background:#B7B1C4}.br.p b:before{background:var(--ok)}
+.jfoot{margin-top:28px;display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+.jfoot .q{font-family:var(--serif);font-weight:300;font-size:28px}
+.jfoot .q em{font-style:italic;color:var(--purple)}
+
+/* ---- MEASURE ---- */
+.mgrid{display:grid;grid-template-columns:440px 1fr;gap:70px;margin-top:44px}
+.prove .st,.lbl{font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin:0 0 14px}
+.arms{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--navy)}
+.arm{padding:18px 18px 18px 0}
+.arm+.arm{padding-left:20px;border-left:1px solid var(--line)}
+.arm b{display:block;font-family:var(--serif);font-weight:400;font-size:30px;margin-bottom:4px}
+.arm.t b{color:var(--purple)}
+.arm span{font-size:15.5px;color:var(--mute);line-height:1.4}
+.eq{margin-top:6px;background:var(--navy);color:#fff;padding:22px 24px}
+.eq b{font-family:var(--serif);font-weight:300;font-size:30px;display:block}
+.eq span{font-size:16px;color:#CFC8DE}
+.assume{margin-top:18px;font-size:15px;color:var(--mute);line-height:1.5}
+.assume b{color:var(--amber);font-size:11px;letter-spacing:.16em;display:block;margin-bottom:2px}
+.funnel{display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--navy)}
+.fs{padding:14px 10px 14px 0;font-family:var(--serif);font-size:22px;position:relative}
+.fs i{display:block;font-style:normal;font-family:Figtree;font-size:12px;color:var(--amber);font-weight:700;margin-bottom:2px}
+.fs:last-child{color:var(--purple)}
+.diag{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.dg{padding:16px 16px 16px 0}
+.dg+.dg{padding-left:18px;border-left:1px solid var(--line)}
+.dg small{display:block;font-size:14.5px;color:var(--mute);margin-bottom:4px}
+.dg b{font-family:var(--serif);font-weight:400;font-size:22px}
+.dg.stop b{color:var(--warn);font-style:italic}
+.scale{display:flex;align-items:stretch;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sc{flex:1;padding:16px 14px 16px 0}
+.sc b{display:block;font-family:var(--serif);font-weight:400;font-size:21px}.sc span{font-size:14.5px;color:var(--mute)}
+.sc.goal{flex:.6;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:300;font-size:56px;color:var(--purple);font-style:italic}
+.sc-ar{display:flex;align-items:center;padding:0 12px 0 0;color:var(--amber);font-family:var(--serif);font-size:22px}
+.guard{position:absolute!important;left:90px;right:90px;bottom:80px}
+.guard .g{font-size:16px;color:var(--mute)}
+.guard .g b{color:var(--ok);letter-spacing:.16em;text-transform:uppercase;font-size:11px;margin-right:12px}
+
+/* ---- ASSET COMMON ---- */
+.asset-bg{background:var(--paper)}
+.desk{position:absolute!important;left:0;right:0;top:170px;bottom:46px}
+.zoomable{cursor:zoom-in;transition:transform .2s}
+.callout{position:absolute!important;font-family:var(--hand);font-size:25px;line-height:1.1;color:var(--purple);max-width:260px;z-index:3}
+.callout:before{content:'↖';font-family:Figtree;font-size:18px;margin-right:6px;color:var(--amber)}
+.callout.l:before{content:'←'}
+
+/* envelope */
+.env{position:absolute;left:80px;top:40px;width:560px;height:300px;background:#FDFCF7;border-radius:4px;box-shadow:0 18px 40px rgba(22,5,53,.16),0 2px 4px rgba(0,0,0,.05);transform:rotate(-4deg);padding:26px 30px}
+.env .ret{font-size:11px;color:#8A8299;line-height:1.4}
+.env .ret b{font-size:15px;color:var(--navy);font-weight:800;letter-spacing:-.2px}
+.env .ret b em{font-style:normal;font-weight:400}
+.env .stamp{position:absolute;right:26px;top:22px;width:92px;height:62px;border:1.5px solid #9C93AE;border-radius:3px;font-size:9px;color:#6B6380;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-weight:600}
+.env .win{position:absolute;left:240px;top:118px;width:280px;height:100px;border:1px solid #DCD6E6;border-radius:5px;background:rgba(240,237,230,.6);padding:12px 16px;font-size:14px;line-height:1.45;color:#2E2640}
+.env .pc{position:absolute;left:30px;top:122px;font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--navy);text-transform:uppercase;border:1.5px solid var(--navy);padding:4px 7px;border-radius:2px}
+.env .title{position:absolute;left:30px;bottom:24px;font-family:var(--serif);font-size:22px;font-weight:400;color:var(--navy);letter-spacing:-.3px}
+.env .title small{display:block;font-family:Figtree;font-size:12px;font-weight:600;color:var(--mute);letter-spacing:0;margin-top:2px}
+
+/* A4 statement */
+.a4{position:absolute;left:660px;top:14px;transform:scale(.9);transform-origin:top left;width:520px;height:735px;background:#fff;box-shadow:0 22px 50px rgba(22,5,53,.18),0 2px 4px rgba(0,0,0,.05);padding:30px 34px;font-size:11.5px;line-height:1.5;color:#2A2238}
+.a4 .hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1.5px solid var(--navy);padding-bottom:12px}
+.a4 .logo{font-weight:400;font-size:18px;color:var(--navy);letter-spacing:-.4px}
+.a4 .logo b{font-weight:800}
+.a4 .meta{font-size:9.5px;text-align:right;color:#5F5872;line-height:1.55}
+.a4 .meta b{color:var(--navy);font-family:var(--mono);font-size:10px}
+.a4 .doc{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-top:14px}
+.a4 h2{font-family:var(--serif);font-weight:400;font-size:27px;margin:2px 0 10px;color:var(--navy);letter-spacing:-.5px}
+.a4 p{margin:0 0 8px}
+.snap{background:var(--cream);border-radius:4px;padding:13px 15px;margin:12px 0}
+.snap .t{font-family:var(--serif);font-weight:400;font-size:16px;color:var(--navy);margin-bottom:9px}
+.snap .row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:9px}
+.snap .row div{background:#fff;border-radius:3px;padding:7px 9px;font-size:9.5px;color:#6B6380}
+.snap .row div b{display:block;font-size:13px;color:var(--navy)}
+.cta{border:1.5px solid var(--navy);border-radius:4px;padding:12px 14px;margin:10px 0}
+.cta .t{font-weight:800;font-size:15px;color:var(--navy);margin-bottom:8px}
+.routes{display:grid;grid-template-columns:1fr 1fr 82px;gap:8px;align-items:center}
+.routes div{font-size:10px;color:#5F5872;line-height:1.35}
+.routes div b{display:block;font-size:10px;letter-spacing:.12em;color:var(--purple);font-weight:800}
+.routes div big{display:block;font-size:13px;font-weight:700;color:var(--navy)}
+.qr{background:#fff;display:block}
+.small{font-size:9.5px;color:#6B6380}
+.trust{border-top:1px solid #E7E2F0;margin-top:10px;padding-top:9px;font-size:9.3px;color:#5F5872;display:flex;gap:10px}
+.trust b{color:var(--navy)}
+.trust .sh{flex:none;width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}
+
+/* reply card */
+.reply{position:absolute;width:470px;height:300px;background:#FFFDF6;border-radius:4px;box-shadow:0 16px 36px rgba(22,5,53,.15);padding:20px 24px;font-size:12px;color:#2A2238;border-top:6px solid var(--navy)}
+.reply h5{font-family:var(--serif);font-weight:400;font-size:21px;margin:0 0 4px;color:var(--navy);letter-spacing:-.3px}
+.reply .pre{font-size:10px;color:#6B6380;margin-bottom:10px;font-family:var(--mono)}
+.reply .ck{display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-size:12.5px}
+.reply .ck i{flex:none;width:13px;height:13px;border:1.5px solid var(--navy);border-radius:2px;margin-top:2px;position:relative}
+.reply .ck i.on:after{content:'✓';color:#2D3F9C;position:absolute;font-family:var(--hand);font-size:22px;left:-1px;top:-12px;font-style:normal;font-weight:700}
+.reply .rp{position:absolute;right:18px;top:16px;font-size:8.5px;font-weight:700;border:1.3px solid #6B6380;padding:5px 7px;text-align:center;color:#6B6380;line-height:1.3}
+
+/* phone */
+.phone{position:absolute;width:290px;height:590px;background:#1B1430;border-radius:42px;padding:12px;box-shadow:0 24px 50px rgba(22,5,53,.25)}
+.phone .scr{width:100%;height:100%;background:var(--white);border-radius:32px;overflow:hidden;position:relative;padding:44px 20px 20px;font-size:13px}
+.phone .notch{position:absolute;left:50%;top:10px;transform:translateX(-50%);width:90px;height:24px;background:#1B1430;border-radius:14px}
+.phone .bar{height:4px;background:var(--cream);border-radius:9px;margin:10px 0 18px;overflow:hidden}
+.phone .bar i{display:block;height:100%;background:var(--navy);border-radius:9px}
+.phone .ph-l{font-weight:400;font-size:13px;color:var(--navy)}
+.phone .ph-l b{font-weight:800}
+.phone .qn{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--mute);text-transform:uppercase}
+.phone h6{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;margin:6px 0 18px;color:var(--navy);letter-spacing:-.3px}
+.phone .opt{border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:9px;font-weight:600;font-size:14.5px;color:var(--navy);background:#fff}
+.phone .opt.sel{border-color:var(--navy);background:var(--cream)}
+.phone .help{font-size:11.5px;color:var(--mute);margin-top:10px;line-height:1.4}
+
+/* data used strip */
+.datastrip{position:absolute;left:80px;bottom:44px;width:600px;border-top:2px solid var(--navy);padding-top:12px}
+.datastrip .r{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;margin:6px 0}
+.datastrip .r b{width:90px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.datastrip .r span{font-family:var(--serif);font-size:17px}
+.datastrip .u b{color:var(--ok)}
+.datastrip .n b{color:var(--warn)}.datastrip .n span{color:var(--mute);font-style:italic;text-decoration:line-through;text-decoration-color:var(--amber)}
+.datastrip .cap{font-size:14px;color:var(--mute);margin-top:6px}
+
+/* ---- PART 2 ---- */
+.p2flow{display:grid;grid-template-columns:repeat(7,1fr);margin-top:46px;position:relative}
+.p2flow:before{content:'';position:absolute;left:0;right:0;top:9px;height:1.5px;background:var(--line)}
+.p2s{position:relative;padding:34px 18px 0 0}
+.p2s:before{content:'';position:absolute;left:0;top:3px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:2px solid var(--navy)}
+.p2s .nn{font-family:var(--serif);font-size:16px;color:var(--amber)}
+.p2s b{display:block;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.15;margin:4px 0 6px;letter-spacing:-.3px}
+.p2s span{font-size:14.5px;color:var(--mute);line-height:1.4}
+.p2s.hl:before{background:var(--purple);border-color:var(--purple)}
+.p2s.hl b{color:var(--purple);font-style:italic}
+.p2s.end:before{background:var(--navy)}
+.p2grid{display:grid;grid-template-columns:1.1fr 1fr;gap:70px;margin-top:46px}
+.before{background:var(--cream);padding:28px 32px}
+.before .st,.metrics .st{font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:14px}
+.before ol{margin:0;padding:0;list-style:none;counter-reset:b}
+.before li{counter-increment:b;display:grid;grid-template-columns:40px 1fr;font-family:var(--serif);font-weight:300;font-size:23px;line-height:1.3;margin-bottom:12px}
+.before li:before{content:counter(b);font-style:italic;color:var(--purple);font-size:26px}
+.before .how{font-size:14.5px;color:var(--mute);margin-top:8px}
+.metrics .blk{border-top:1px solid var(--line);padding:14px 0 16px}
+.metrics .blk p{margin:0;font-size:17px;line-height:1.6}
+.metrics .blk p span:not(:last-child):after{content:' · ';color:var(--amber)}
+.never{border-top:2px solid var(--navy);padding-top:16px;font-family:var(--serif);font-weight:300;font-size:24px;line-height:1.3}
+.never em{font-style:italic;color:var(--purple)}
+
+/* Legacy cards */
+.lcard{position:absolute;width:360px;height:500px;background:var(--cream);border-radius:6px;box-shadow:0 18px 44px rgba(22,5,53,.18);padding:30px;color:#3A2E2A;overflow:hidden}
+.lcard.front{background:var(--navy);color:#fff}
+.lcard.front .to,.lcard.front .from{font-family:var(--hand);font-size:36px;color:var(--peach);border-bottom:1px solid rgba(255,255,255,.25);padding-bottom:2px;position:relative}
+.lcard.front .to span,.lcard.front .from span{font-family:Figtree;font-size:13px;color:#A99FC2;margin-right:8px;font-weight:600}
+.lcard.front h3{font-family:var(--serif);font-weight:300;font-size:50px;line-height:1.02;letter-spacing:-1px;margin:84px 0;position:relative}
+.lcard.front h3 em{font-style:italic;color:var(--peach)}
+.lcard.front .orn{position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(228,152,43,.55),rgba(228,152,43,0) 65%)}
+.lcard.front .orn2{position:absolute;left:-80px;bottom:-110px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(201,215,225,.35),rgba(201,215,225,0) 65%)}
+.lcard.inside{font-family:var(--serif);font-weight:300;font-size:18px;line-height:1.55}
+.lcard.inside .lead{font-size:24px;font-weight:400;color:var(--navy);margin-bottom:14px;line-height:1.25}
+.lcard.inside .note{font-family:var(--hand);font-size:27px;color:#2D3F9C;line-height:1.15;margin:18px 0}
+.lcard.inside .keep{font-family:Figtree;font-size:12px;font-weight:700;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;position:absolute;bottom:26px;left:30px}
+.lcard.back{background:var(--white);font-size:14px;line-height:1.45}
+.lcard.back .blk{background:var(--navy);color:#fff;border-radius:4px;padding:16px 18px;margin-bottom:18px}
+.lcard.back .blk small{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--peach);margin-bottom:4px}
+.lcard.back .blk b{font-family:var(--serif);font-weight:400;font-size:22px;display:block}
+.lcard.back .ref{font-family:var(--mono);background:rgba(255,255,255,.12);display:inline-block;padding:3px 8px;border-radius:3px;margin-top:6px;font-size:14px}
+.lcard.back .gd{display:flex;gap:14px;align-items:center}
+.lcard.back .gd b{color:var(--navy);font-family:var(--serif);font-weight:400;font-size:18px;display:block;margin-bottom:3px}
+.lcard.back .pm{margin-top:18px;font-size:12px;color:#6B6380;border-top:1px solid #EEE;padding-top:12px}
+.lcard.back .lg{position:absolute;bottom:22px;left:30px;color:var(--navy);font-size:16px;letter-spacing:-.3px}
+.lcard.back .lg b{font-weight:800}
+
+/* ---- AI ---- */
+.aigrid{display:grid;grid-template-columns:1.5fr 1fr;gap:70px;margin-top:40px}
+.aihead,.airow{display:grid;grid-template-columns:170px 1fr 40px 1fr;gap:12px;align-items:baseline}
+.aihead{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);padding-bottom:10px;border-bottom:2px solid var(--navy)}
+.airow{padding:17px 0;border-bottom:1px solid var(--line)}
+.airow b{font-family:var(--serif);font-weight:400;font-size:22px}
+.airow .ai{font-size:16.5px;color:var(--mute);text-decoration:line-through;text-decoration-color:var(--amber)}
+.airow .ar{color:var(--amber);font-family:var(--serif);font-size:20px}
+.airow .me{font-size:17.5px;font-weight:600}
+.aiside .blk{border-top:2px solid var(--navy);padding:12px 0 22px}
+.aiside h4{margin:0 0 6px;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.aiside ul{margin:0;padding-left:0;list-style:none;font-family:var(--serif);font-weight:300;font-size:22px;line-height:1.5}
+.aiside .ok h4{color:var(--ok)}.aiside .no h4{color:var(--warn)}
+.aiside .me{font-family:var(--serif);font-weight:300;font-size:28px;line-height:1.25;border-top:2px solid var(--navy);padding-top:16px}
+.aiside .me em{font-style:italic;color:var(--purple)}
+
+/* ---- zoom overlay ---- */
+#zoom{position:absolute;inset:0;background:rgba(22,5,53,.78);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out}
+#zoom.on{display:flex}
+#zoom .holder{position:relative}
+#zoom .holder>*{position:relative!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;transform:none!important}
+
+/* ---- controls ---- */
+#ctl{position:fixed;top:14px;right:16px;display:flex;gap:8px;z-index:30;opacity:0;transition:opacity .3s}
+body.mouse #ctl{opacity:1}
+#ctl button{font:600 13px Figtree,sans-serif;background:var(--navy);color:#fff;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;box-shadow:0 4px 14px rgba(22,5,53,.2)}
+#ctl button.alt{background:#fff;color:var(--navy);border:1px solid var(--line)}
+#notes{position:fixed;top:0;right:0;bottom:0;width:440px;background:#120A24;color:#E9E4F6;transform:translateX(100%);transition:transform .25s;overflow-y:auto;padding:22px 24px 40px;font-size:15px;line-height:1.6;z-index:20}
+body.notes #notes{transform:none}
+#notes h3{margin:0 0 4px;font-size:18px}
+#notes .pos{font-family:var(--mono);font-size:11px;color:#8C80A8;margin-bottom:12px}
+#notes .land{background:rgba(242,201,160,.12);border-left:3px solid var(--peach);padding:9px 12px;border-radius:0 8px 8px 0;font-weight:700;margin-bottom:12px}
+#notes .land i{display:none}
+#notes .say p{margin:0 0 11px}#notes .say ul{margin:0;padding-left:18px}#notes .say li{margin-bottom:8px}
+#notes .say em{color:var(--peach);font-style:normal}
+#notes .qa{margin-top:14px;border-top:1px solid #2A2142;padding-top:10px}
+#notes .qa dt{font-weight:700;color:#fff;margin-top:9px}
+#notes .qa dd{margin:2px 0 0;color:#BDB3D6}
+#hint{position:fixed;left:14px;bottom:10px;font-size:11px;color:#9A93A8;z-index:10;transition:opacity .6s}
+#hint kbd{background:#fff;border:1px solid var(--line);color:var(--navy);border-radius:4px;padding:1px 6px;font-family:inherit}
+#prog{position:fixed;left:0;bottom:0;height:2px;background:var(--amber);z-index:11;transition:width .25s}
+
+@media (max-width:900px){
+  #viewport{bottom:58vh!important;right:0!important}
+  #notes{transform:none!important;top:42vh;width:100%;border-left:0;border-top:1px solid #2A2142;padding:16px 18px 90px;font-size:16px}
+  #ctl,#hint{display:none}
+  #mnav{display:flex!important}
+}
+#mnav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:40;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#120A24;border-top:1px solid #2A2142}
+#mnav button{flex:1;font:700 16px Figtree,sans-serif;background:#241A3B;color:#fff;border:0;border-radius:12px;padding:14px}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+<!-- ═══════════ 0 · COVER ═══════════ -->
+<section class="slide" data-title="Cover">
+  <div class="wash w-amber" style="width:620px;height:520px;left:-160px;bottom:-200px"></div>
+  <div class="wash w-mist" style="width:700px;height:500px;right:-120px;top:120px"></div>
+  <div class="wash w-peach" style="width:520px;height:420px;left:520px;bottom:-160px"></div>
+  <div class="polaroid" style="width:300px;height:340px;right:110px;top:80px;transform:rotate(5deg)"><div class="ph ph-a" data-photo="1"></div><div class="cap">Summers, years ago</div></div>
+  <div class="polaroid" style="width:250px;height:290px;right:400px;top:500px;transform:rotate(-6deg)"><div class="ph ph-b" data-photo="2"></div><div class="cap">Mum &amp; Dad</div></div>
+  <div class="cover">
+    <div class="kicker">Lifecycle Marketing Manager · Case study</div>
+    <p class="big">Earn the right to the <em>next conversation.</em></p>
+    <div class="meta">
+      <div>Prepared for<b>Octopus Legacy</b></div>
+      <div>By<b>Edou Mota</b></div>
+      <div>Date<b>9 October 2026</b></div>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="wm"><b>octopus</b> legacy</span></div>
+</section>
+
+<!-- ═══════════ 1 · THESIS ═══════════ -->
+<section class="slide" data-title="The idea">
+  <div class="wash w-peach" style="width:520px;height:380px;right:-140px;bottom:-140px;opacity:.4"></div>
+  <div class="kicker">The idea</div>
+  <h1>Both audiences have a relationship with us<br><em>they never asked for.</em></h1>
+  <div class="thesis-cols">
+    <div class="tcol">
+      <div class="n">1</div>
+      <div class="lab">700k inherited customers</div>
+      <h3>They didn't choose us.</h3>
+      <div class="who">Their will moved to Octopus Legacy, sometimes more than once.</div>
+      <div class="tsteps"><span>Reassure</span><span class="sep">→</span><span>make it relevant</span><span class="sep">→</span><span>ask one thing</span></div>
+    </div>
+    <div class="vr"></div>
+    <div class="tcol">
+      <div class="n">2</div>
+      <div class="lab">The people named in the plan</div>
+      <h3>They've never heard of us.</h3>
+      <div class="who">People named in someone else's plan.</div>
+      <div class="tsteps"><span>Let the customer introduce us</span><span class="sep">→</span><span>be useful first</span></div>
+    </div>
+  </div>
+  <div class="thesis-foot">Trust as a growth strategy, <em>not a delay to it.</em></div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Edou Mota · Lifecycle case study</span></div>
+</section>
+
+<!-- ═══════════ 2 · SEGMENT ═══════════ -->
+<section class="slide" data-title="Part 1 · Who first">
+  <div class="kicker"><span class="pill">Part 1</span> Who first</div>
+  <h1>65–74, a will 10+ years old, <em>and a home.</em></h1>
+  <p class="sub">One cohort to prove the playbook on, not 700,000 people at once.</p>
+  <div class="seg">
+    <div>
+      <div class="sieve">
+        <div class="lvl l1"><span class="num">700,000</span><span class="what">inherited customers</span></div>
+        <div class="lvl l2 k"><span class="num">~245,000</span><span class="what"><b>aged 65–74</b> · from the brief</span></div>
+        <div class="lvl l3 f"><span class="num">will 10+ yrs</span><span class="what">filter to size</span></div>
+        <div class="lvl l4 f"><span class="num">homeowner</span><span class="what">at the time of the will</span></div>
+      </div>
+      <div style="margin-top:22px"><span class="tag"><i>To validate</i> Exact cohort sized before launch. Will age × property split isn't in the brief.</span></div>
+      <div style="margin-top:14px"><span class="tag"><i style="color:var(--purple)">Prioritisation signal</i> Mirror will, once current household status is known</span></div>
+    </div>
+    <div>
+      <div class="why">
+        <div class="w"><i>01</i><b>Time</b><span>Ten-plus years is an honest reason to look again, without ever saying "out of date".</span></div>
+        <div class="w"><i>02</i><b>Life stage</b><span>Hypothesis: wider planning, including an LPA, may matter more here.</span></div>
+        <div class="w"><i>03</i><b>Property</b><span>A useful signal of broader planning needs, to test.</span></div>
+        <div class="w"><i>04</i><b>Reach</b><span>Post reaches everyone. Email and mobile reach some.</span></div>
+      </div>
+      <div class="wont"><span class="lab">What we won't assume</span><span>their will is out of date</span><span>they lack an LPA</span><span>they're still married</span></div>
+    </div>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Part 1 · Engaging cold customers</span></div>
+</section>
+
+<!-- ═══════════ 3 · JOURNEY ═══════════ -->
+<section class="slide" data-title="Part 1 · The journey">
+  <div class="kicker"><span class="pill">Part 1</span> The six-month journey</div>
+  <h1>Behaviour sets the pace, <em>not the calendar.</em></h1>
+  <div class="maturity">
+    <div><b><i>i.</i>What we know</b><span>Will data from when it was written</span></div>
+    <div><b><i>ii.</i>What they tell us</b><span>The Will Check</span></div>
+    <div><b><i>iii.</i>What they do</b><span>Calls, cards, scans, visits</span></div>
+    <div class="nba"><b><i>iv.</i>Next best action</b><span>Set by the customer, not a schedule</span></div>
+  </div>
+  <div class="jflow">
+    <div class="jnode jn1">
+      <div class="st">Trigger</div>
+      <h4>Your will,<br><i>13 years on</i></h4>
+      <p>The Will Storage Statement. Post-led, with a digital copy where we have permission.</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="jnode jn2">
+      <div class="st">Discover</div>
+      <h4>The 3-minute<br><i>Will Check</i></h4>
+      <p>"Has anything changed?"</p>
+      <div class="chips"><span>Property</span><span>Family</span><span>Executors</span><span>LPA</span><span>Wishes</span></div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="branches">
+      <div class="br r"><b><span>Ready<small>Need, and wants help</small></span></b><span>Priority handoff to a consultant within an agreed SLA. Promotional nurture stops.</span></div>
+      <div class="br i"><b><span>Interested<small>Real behaviour, not ready</small></span></b><span>Content built on their need or barrier, then an invitation to discuss their plan</span></div>
+      <div class="br s"><b><span>Silent<small>No meaningful action</small></span></b><span>A different postal proposition, a final prompt, then rest</span></div>
+      <div class="br p"><b><span>Protect<small>Opt-out or complaint</small></span></b><span>Service messages only</span></div>
+    </div>
+  </div>
+  <div class="jfoot">
+    <div class="q">Six months is the <em>measurement window</em>, not six months of scheduled marketing.</div>
+    <span class="tag"><i>Guardrail</i> Silent: max 3 proactive contacts, then long-term lifecycle</span>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Part 1 · Engaging cold customers</span></div>
+</section>
+
+<!-- ═══════════ 4 · MEASURE ═══════════ -->
+<section class="slide" data-title="Part 1 · Measure & pivot">
+  <div class="kicker"><span class="pill">Part 1</span> Measurement &amp; pivot</div>
+  <h1>Prove it's incremental. <em>Then scale it.</em></h1>
+  <div class="mgrid">
+    <div class="prove">
+      <div class="st">Prove</div>
+      <div class="arms">
+        <div class="arm t"><b>Treatment</b><span>Will Storage Statement + behavioural journey</span></div>
+        <div class="arm"><b>Holdout</b><span>Today's experience</span></div>
+      </div>
+      <div class="eq"><b>Incremental conversion</b><span>Treatment conversion − holdout conversion</span></div>
+      <div class="assume"><b>ASSUMPTION</b>Conversion means a paid estate-planning purchase within the six-month window, to be aligned with the business definition.</div>
+    </div>
+    <div>
+      <div class="lbl">Where the chain breaks tells us what to fix</div>
+      <div class="funnel"><div class="fs"><i>1</i>Statement</div><div class="fs"><i>2</i>Will Check</div><div class="fs"><i>3</i>Need found</div><div class="fs"><i>4</i>Consultant</div><div class="fs"><i>5</i>Purchase</div></div>
+      <div class="diag">
+        <div class="dg"><small>Few Will Checks</small><b>Proposition</b></div>
+        <div class="dg"><small>Checks, no handoff</small><b>Trust / CTA</b></div>
+        <div class="dg"><small>Handoffs, no purchase</small><b>Product / price / sales</b></div>
+        <div class="dg stop"><small>No lift vs holdout</small><b>Stop and rethink</b></div>
+      </div>
+      <div class="lbl" style="margin-top:44px">Path to 35%</div>
+      <div class="scale">
+        <div class="sc"><b>Pilot</b><span>Matched to capacity</span></div><div class="sc-ar">→</div>
+        <div class="sc"><b>Early read</b><span>Behavioural signals</span></div><div class="sc-ar">→</div>
+        <div class="sc"><b>Full segment</b><span>If the evidence supports it</span></div><div class="sc-ar">→</div>
+        <div class="sc"><b>Next cohorts</b><span>Proposition &amp; channel adapted</span></div><div class="sc-ar">→</div>
+        <div class="sc goal" style="flex-direction:column">35%<small style="font-family:Figtree;font-style:normal;font-size:12.5px;color:var(--mute);margin-top:4px">across the base</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="guard"><div class="g"><b>Guardrails</b>complaints · opt-outs · negative service feedback · consultant capacity</div></div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Part 1 · Engaging cold customers</span></div>
+</section>
+
+<!-- ═══════════ 5 · ASSET 1a ═══════════ -->
+<section class="slide asset-bg" data-title="Asset 1 · Will Storage Statement">
+  <div class="wash w-peach" style="width:520px;height:420px;left:-160px;bottom:-180px;opacity:.35"></div>
+  <div class="kicker"><span class="pill">Part 1 · Asset</span> Week 0 · Post</div>
+  <h1>The Will Storage Statement</h1>
+  <p class="sub">A statement, not a mailer.</p>
+  <div class="desk">
+    <div class="env zoomable">
+      <div class="ret"><b><b>octopus</b> legacy</b><br>Looking after wills originally written with <b style="font-size:11px;font-weight:700">Hartwell Wills</b></div>
+      <div class="stamp">Postage paid<br>GB<br>Octopus Legacy</div>
+      <div class="pc">Private &amp; confidential</div>
+      <div class="win">Mrs Margaret Ellis<br>14 Elm Grove<br>Bristol<br>BS6 7QJ</div>
+      <div class="title">Your Will Storage Statement · 2026<small>Important information about your will storage</small></div>
+    </div>
+
+    <div class="a4 zoomable">
+      <div class="hd">
+        <div class="logo"><b>octopus</b> legacy</div>
+        <div class="meta">Storage reference <b>OL-4821-3307</b><br>Statement date 12 October 2026<br>Stored with us since March 2024</div>
+      </div>
+      <div class="doc">Will Storage Statement · 2026</div>
+      <h2>Your will is safe with us.</h2>
+      <p>Dear Mrs Ellis,</p>
+      <p>Your will, originally written with Hartwell Wills, remains safely stored with Octopus Legacy. Your storage is still free, and nothing about that changes.</p>
+      <div class="snap">
+        <div class="t">Your will, 13 years on</div>
+        <div class="row">
+          <div>Written<b>2013</b></div>
+          <div>Stored safely<b>✓ Since 2024</b></div>
+          <div>Storage cost<b>£0</b></div>
+        </div>
+        <div style="font-size:11px">A lot can change in 13 years: your home, your family, the people you'd trust to act for you. That doesn't mean your will needs changing. But it may be worth checking it still reflects your life today.</div>
+      </div>
+      <div class="cta">
+        <div class="t">Has anything changed? Take your 3-minute Will Check.</div>
+        <div class="routes">
+          <div><b>CALL</b><big>0800 000 0000</big>Do it with us, Mon–Fri</div>
+          <div><b>POST</b><big>Reply card</big>Enclosed, no stamp needed</div>
+          <svg class="qr" data-seed="7" width="78" height="78"></svg>
+        </div>
+      </div>
+      <p class="small">Checking your plans doesn't change your existing will or affect your free storage.</p>
+      <div class="trust"><div class="sh">✓</div><div><b>Not sure this is really from us?</b> Don't use the phone number or QR code in this letter. Visit octopuslegacy.com yourself and use the contact details there. Quote reference OL-4821-3307. We'll never ask for your bank details to keep your will stored.</div></div>
+    </div>
+
+    <div class="callout" style="left:130px;top:380px">The provider they <i>do</i> recognise, on the envelope</div>
+    <div class="callout" style="left:1135px;top:110px">We know more than we show. Time is the only personal detail.</div>
+    <div class="callout" style="left:1135px;top:300px">Three response routes. Phone first for this age group.</div>
+    <div class="callout" style="left:1135px;top:560px">Scam-proof: verify us without trusting this letter</div>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Click any item to enlarge</span></div>
+</section>
+
+<!-- ═══════════ 6 · ASSET 1b ═══════════ -->
+<section class="slide asset-bg" data-title="Asset 1 · Behind the CTA">
+  <div class="kicker"><span class="pill">Part 1 · Asset</span> The response</div>
+  <h1>The Will Check turns old data into <em>today's intent</em></h1>
+  <div class="desk">
+    <div class="reply zoomable" style="left:70px;top:40px;transform:rotate(-2deg)">
+      <div class="rp">FREEPOST<br>Octopus Legacy</div>
+      <h5>I'd like to check my will</h5>
+      <div class="pre">Mrs M Ellis · OL-4821-3307</div>
+      <div style="font-size:11px;color:#6B6380;margin-bottom:4px">Since my will was written (tick any):</div>
+      <div class="ck"><i class="on"></i>Something has changed in my life</div>
+      <div class="ck"><i></i>I'm not sure whether anything needs updating</div>
+      <div class="ck"><i class="on"></i>I'd like to talk about other plans too, like who could make decisions for me if I couldn't</div>
+      <div class="ck"><i></i>I'd just like someone to explain what I have now</div>
+      <div style="display:flex;gap:18px;margin-top:8px;font-size:12px"><span class="ck" style="margin:0"><i class="on"></i>Phone</span><span class="ck" style="margin:0"><i></i>Email</span><span style="color:#6B6380">Best time:</span><span class="ck" style="margin:0"><i class="on"></i>Morning</span><span class="ck" style="margin:0"><i></i>Afternoon</span></div>
+      <div style="font-size:10px;color:#6B6380;margin-top:8px">Returning this card doesn't change your will.</div>
+    </div>
+    <div class="callout" style="left:110px;top:360px;max-width:330px">A hand-raise, not a questionnaire. Pre-filled, so they just tick and post.</div>
+
+    <div class="phone zoomable" style="left:720px;top:10px">
+      <div class="scr"><div class="notch"></div>
+        <div class="ph-l"><b>octopus</b> legacy · Will Check</div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <div class="qn">Question 4 of 5</div>
+        <h6>Do you have a Lasting Power of Attorney in place?</h6>
+        <div class="opt">Yes</div>
+        <div class="opt">No</div>
+        <div class="opt sel">Not sure what this is</div>
+        <div class="help">An LPA lets people you trust make decisions for you if you ever can't. Your will only applies after you die.</div>
+      </div>
+    </div>
+    <div class="phone zoomable" style="left:1060px;top:10px">
+      <div class="scr"><div class="notch"></div>
+        <div class="ph-l"><b>octopus</b> legacy · Will Check</div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <div class="qn">Question 5 of 5</div>
+        <h6>Would you like help checking your plans still reflect your wishes?</h6>
+        <div class="opt sel">Yes, I'd like to speak to someone</div>
+        <div class="opt">Maybe, show me what to consider</div>
+        <div class="opt">No, I'm happy with my plans</div>
+        <div class="help">Q1–4 tell us the <b>need</b>. Q5 tells us if they're <b>ready</b>. Together they decide Ready or Interested.</div>
+      </div>
+    </div>
+
+    <div class="datastrip">
+      <div class="r"><b style="color:var(--purple);width:150px">Selects &amp; routes</b><span>Will year · property · will type</span></div>
+      <div class="r u"><b style="width:150px">Shown to them</b><span>Will year</span></div>
+      <div class="r n"><b style="width:150px">Never surfaced</b><span>Beneficiaries · executors · marital status · charity gift</span></div>
+      <div class="cap">Having a data point doesn't mean we've earned the right to show it.</div>
+    </div>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Online: 5 questions · Phone: adviser-led · Card: hand-raise, finished on callback</span></div>
+</section>
+
+<!-- ═══════════ 7 · PART 2 ═══════════ -->
+<section class="slide" data-title="Part 2 · The introduction">
+  <div class="kicker"><span class="pill">Part 2</span> The Legacy Box has just landed</div>
+  <h1>Turn a private plan into a <em>trusted introduction.</em></h1>
+  <p class="sub">We don't contact the named people. The customer makes the introduction.</p>
+  <div class="p2flow" style="grid-template-columns:repeat(5,1fr)">
+    <div class="p2s"><div class="nn">01</div><b>Prepare</b><span>The customer hears why the right people should know, before the box lands</span></div>
+    <div class="p2s hl"><div class="nn">02</div><b>Introduce</b><span>Cards in the box, next to the Conversation Cards. The customer writes and hands them over.</span></div>
+    <div class="p2s"><div class="nn">03</div><b>Engage</b><span>The named person chooses to scan, or keeps the card for later</span></div>
+    <div class="p2s"><div class="nn">04</div><b>Permission</b><span>Useful guidance first. Their own plan and the family benefit only later.</span></div>
+    <div class="p2s end"><div class="nn">05</div><b>Support</b><span>The family knows who to call when the time comes</span></div>
+  </div>
+  <div class="p2grid">
+    <div class="before">
+      <div class="st">What the customer hears before the box lands</div>
+      <ol>
+        <li>A plan works best when the right people know it exists.</li>
+        <li>Your box has cards for the people you've chosen. It's your introduction, in your words.</li>
+        <li>You're in control. We won't contact the people in your plan or treat them as marketing leads.</li>
+      </ol>
+      <div class="how">The consultant says it at the appointment, and the pre-delivery message repeats it.</div>
+    </div>
+    <div class="metrics">
+      <div class="blk"><div class="st">Measure · short term</div><p><span>Card activation</span><span>Guide engagement</span><span>Voluntary opt-in</span><span>Own-plan starts</span></p></div>
+      <div class="blk"><div class="st">Measure · longer term</div><p><span>Contacts via a family reference</span><span>Executor and probate support</span><span>Conversion of opted-in contacts</span></p></div>
+      <div class="never">The customer's first follow-up after delivery: <em>"Have you shared your cards?"</em></div>
+    </div>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Part 2 · Engaging offline customers post-purchase</span></div>
+</section>
+
+<!-- ═══════════ 8 · ASSET 2 ═══════════ -->
+<section class="slide asset-bg" data-title="Asset 2 · You're part of my plan">
+  <div class="wash w-amber" style="width:560px;height:420px;right:-160px;top:-160px;opacity:.3"></div>
+  <div class="wash w-mist" style="width:520px;height:420px;left:-160px;bottom:-200px;opacity:.4"></div>
+  <div class="kicker"><span class="pill">Part 2 · Asset</span> Three cards inside the Legacy Box</div>
+  <h1>"You're part of my plan."</h1>
+  <div class="desk" style="top:200px">
+    <div class="lcard front zoomable" style="left:70px;top:0;transform:rotate(-3deg)">
+      <div class="orn"></div><div class="orn2"></div>
+      <div class="to"><span>To</span>Sarah</div>
+      <h3>You're part of <em>my plan.</em></h3>
+      <div class="from"><span>From</span>Mum</div>
+    </div>
+    <div class="lcard inside zoomable" style="left:470px;top:-10px">
+      <div class="lead">There's something I'd like you to know.</div>
+      I've made my plans with Octopus Legacy. If something happens to me, they hold my will safely and can help you understand what needs to happen next.
+      <div class="note">Hopefully not for a very long time! Love you. M x</div>
+      <div class="keep">Keep this card somewhere safe</div>
+    </div>
+    <div class="lcard back zoomable" style="left:870px;top:0;transform:rotate(2deg)">
+      <div class="blk"><small>When the time comes</small><b>Call Octopus Legacy<br>0800 000 0000</b><span class="ref">Family ref OL-F7K2P</span></div>
+      <div class="gd"><svg class="qr" data-seed="23" width="96" height="96"></svg><div><b>What could being part of someone's plan mean?</b>You don't need to know everything today. Scan for a simple guide.</div></div>
+      <div class="pm">You won't be added to marketing just because someone included you in their plans.</div>
+      <div class="lg"><b>octopus</b> legacy</div>
+    </div>
+    <div class="phone zoomable" style="left:1270px;top:-30px;width:250px;height:510px;border-radius:38px">
+      <div class="scr" style="padding:40px 16px 16px;border-radius:28px"><div class="notch"></div>
+        <div class="ph-l"><b>octopus</b> legacy</div>
+        <h6 style="font-size:18px;margin-top:16px">Someone trusts you to be part of their plan. What does that mean?</h6>
+        <div class="opt" style="font-size:13px;padding:11px">I've been asked to be an executor</div>
+        <div class="opt" style="font-size:13px;padding:11px">I'm part of someone's wider plans</div>
+        <div class="opt" style="font-size:13px;padding:11px">I'm not sure</div>
+        <div class="help">Guidance first. Their own plan, and the family benefit, only come later.</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>The customer writes the most important words. Each card ID is non-sensitive and never encodes role or estate.</span></div>
+</section>
+
+<!-- ═══════════ 9 · AI ═══════════ -->
+<section class="slide" data-title="How I used AI">
+  <div class="kicker">One last thing</div>
+  <h1>AI as challenger, <em>not decision-maker.</em></h1>
+  <p class="sub">I used two models to generate options and challenge assumptions. The final decisions were mine.</p>
+  <div class="aigrid">
+    <div>
+      <div class="aihead"><span>Topic</span><span>AI proposed</span><span></span><span>I decided</span></div>
+      <div class="airow"><b>Sizing</b><span class="ai">~90k cohort from %s not in the brief</span><span class="ar">→</span><span class="me">Only ~245k, from the brief</span></div>
+      <div class="airow"><b>Segment</b><span class="ai">Mirror-will couples as the core</span><span class="ar">→</span><span class="me">A priority signal, written to individually</span></div>
+      <div class="airow"><b>Personalisation</b><span class="ai">Use everything the will tells us</span><span class="ar">→</span><span class="me">A sensitivity hierarchy, with some data left out</span></div>
+      <div class="airow"><b>Operations</b><span class="ai">"48 hours", "4–6 weeks"</span><span class="ar">→</span><span class="me">Agreed SLAs and test hypotheses</span></div>
+    </div>
+    <div class="aiside">
+      <div class="blk ok"><h4>Where it helped</h4><ul><li>Lots of options, fast</li><li>Stress-testing assumptions</li><li>Q&amp;A preparation</li><li>Building this deck</li></ul></div>
+      <div class="blk no"><h4>Where it didn't</h4><ul><li>No knowledge of your data, ops or customers</li><li>Generic copy, invented numbers</li></ul></div>
+      <div class="me">Privacy, sensitivity and commercial trade-offs <em>needed human judgement.</em></div>
+    </div>
+  </div>
+  <div class="foot"><span class="wm"><b>octopus</b> legacy</span><span>Edou Mota · Lifecycle case study</span></div>
+</section>
+
+<!-- ═══════════ 10 · CLOSE ═══════════ -->
+<section class="slide" data-title="Close">
+  <div class="wash w-amber" style="width:600px;height:480px;right:-140px;bottom:-200px"></div>
+  <div class="wash w-mist" style="width:640px;height:460px;left:-200px;top:-160px"></div>
+  <div class="wash w-peach" style="width:420px;height:360px;left:620px;bottom:-200px"></div>
+  <div class="cover">
+    <div class="kicker">Thank you</div>
+    <div>
+      <p class="big" style="font-size:72px;max-width:1300px">The data tells me what their life looked like. <em>The Will Check tells me what it looks like today.</em></p>
+      <p class="sub" style="margin-top:34px;font-size:26px;font-family:var(--serif);font-weight:300;color:var(--navy)">And in Part 2, <i>the customer makes the introduction.</i></p>
+    </div>
+    <div class="meta"><div>Questions<b>Over to you</b></div></div>
+  </div>
+  <div class="foot"><span></span><span class="wm"><b>octopus</b> legacy</span></div>
+</section>
+
+<div id="zoom"><div class="holder"></div></div>
+</div></div>
+
+<div id="mnav"><button onclick="show(cur()-1)">← Back</button><button onclick="show(cur()+1)">Next →</button></div>
+<aside id="notes"></aside>
+<div id="prog"></div>
+<div id="ctl"><button onclick="openPresenter()">Presenter ▸</button><button class="alt" onclick="toggleFS()">Fullscreen</button></div>
+<div id="hint"><kbd>←</kbd><kbd>→</kbd> navigate · <kbd>P</kbd> presenter · <kbd>F</kbd> fullscreen · move the mouse for buttons</div>
+
+<script>
+/* ═════════ SPEAKER NOTES: t = seconds budget, land = the one thing, say = speech, qa = pocket ═════════ */
+const N=[
+{t:15,land:"One idea runs through both parts.",
+ say:`<ul><li>Thanks for having me</li><li>One idea across both parts: <em>earn the right to the next conversation</em></li><li>Order: the choices → what I'd put in front of customers → how I'd know it's working</li></ul>`,
+ qa:[]},
+
+{t:60,land:"Trust here isn't separate from growth. It's how we get growth.",
+ say:`<ul><li>Eliza's words: <em>estate planning is bereavement support</em>, from first will to the family afterwards</li><li>Inherited customers <strong>didn't choose us</strong>, and some resent the move</li><li>The named people may <strong>never have heard of us</strong></li><li>So the answer isn't more communications</li><li>But still commercially accountable to 35%</li></ul>`,
+ qa:[["Isn't 'trust first' just slower?","No. The first communication reassures, personalises <b>and</b> asks for action. There's no reassurance-only month. Trust is how it works, not a phase before it."],
+ ["Why one thesis for both parts?","Lifecycle at Octopus Legacy is one relationship across a lifetime and into the family. Two disconnected tactics would undersell that."]]},
+
+{t:90,land:"Time gives me an honest reason to get in touch.",
+ say:`<ul><li>Not starting with all 700k: I want a credible reason to contact them, and enough scale to learn</li><li><strong>65–74 · will 10+ years · homeowner</strong> at the time</li><li>Strongest signal = <em>time</em>: an honest reason to ask, without claiming anything's wrong</li><li>Age and property = <strong>hypotheses</strong> about planning relevance, not product assumptions</li><li>~245k from the brief (60% over 65 − 25% over 75). Validate the rest before launch</li><li>Mirror will = prioritisation only</li><li>Point right: I don't know it's outdated, I don't know about an LPA, I don't know they're still together</li></ul>`,
+ qa:[["Why not 75+ (closest to death, most urgent)?","Higher sensitivity, more likely post-only, possibly more capacity pressure. A strong candidate for wave two with an adapted, post-led, possibly phone-led version. Not excluded, just sequenced."],
+ ["Why not under-65s (more digital, cheaper)?","They may offer stronger digital reach and lower contact cost, so they're a very credible adjacent cohort. I've simply chosen to test the combination of will age, property and life stage first."],
+ ["Why not target the 'frustrated' customers?","We can't identify frustration from the data. It's a risk we design for (reassurance, contact caps, a Protect group), not a segment we can select."],
+ ["Why not segment by acquired provider?","Permissions vary by source business, so that's an eligibility and channel filter inside the journey, not the segment logic."],
+ ["Charity gift / beneficiaries?","Available, but sensitive. Not used in segmentation or customer-facing copy."],
+ ["How do you get 245k?","60% are over 65 and 25% are over 75, so 35% are 65–74, which is ~245k of 700k. That assumes the bands are nested, as they read."],
+ ["Why one segment when 35% is the goal?","The brief asks for one. More importantly, one well-measured cohort gives us a playbook to scale. That's the next slide but one."]]},
+
+{t:180,land:"The Will Check is the brain of the journey.",
+ say:`<ul><li>The data shows life <strong>when the will was written</strong>, not today</li><li>So CRM shouldn't guess the product. Give them a reason to tell us</li><li>Will Check → today's first-party data, and it sorts people fast</li><li><strong>Ready</strong> → consultant, agreed SLA, nurture stops</li><li><strong>Interested</strong> → content on the need or barrier they told us about</li><li><strong>Silent</strong> → change the proposition, limited attempts, then stop</li><li><strong>Protect</strong> → overrides the commercial journey</li><li>Finish: <em>six months is the measurement window, not six months of scheduled marketing</em></li></ul>`,
+ qa:[["Why post-led?","Post reaches nearly everyone. Email covers ~45% and skews under-70. It's a physical document about a physical document. Digital backs it up where we have permission."],
+ ["Would you treat an email open as intent?","No. Opens are noise, and Apple Mail Privacy Protection inflates them. Intent means a started or completed Will Check, a callback request, a reply card, a call, or repeated meaningful site behaviour."],
+ ["What's the SLA?","Hours or a few days, never weeks. I'd agree the number with the consultant team based on capacity and current conversion data rather than invent one."],
+ ["Consultant capacity?","Rollout is phased against capacity, so CRM doesn't create demand the service team can't absorb. There's no point creating ready customers and then making them wait two weeks."],
+ ["Why max 3 contacts?","It's a starting guardrail, balancing the 35% target against an audience that may resent the transfer. Monitored through complaints, opt-outs and contact-centre feedback. Loosen it if guardrails stay clean; tighten it if complaints spike after the second contact."],
+ ["Why an annual statement?","I'm not assuming it should be. This test also tests a potential new lifecycle trigger. If it works, I'd recommend making it an annual moment."],
+ ["Mirror wills?","Prioritisation signal only. Write to each person individually unless the current household is verified. A mirror will from 13 years ago doesn't prove they're still together, alive or at the same address."],
+ ["How do you know they lack an LPA?","We don't. The will data doesn't tell us. That's why the Will Check asks."],
+ ["What's the Will Check physically?","Online: the full five-question check. Phone: an adviser walks through the same questions. Reply card: a deliberately lighter hand-raise, with the adviser completing the check on the callback. Nobody fills in a questionnaire on a postcard."],
+ ["Future triggers?","Address changes and returned post are safe to use. Verified life-event triggers only where data and permissions have been checked. I wouldn't automate sensitive events."]]},
+
+{t:120,land:"If engagement looks great but there's no incremental lift, I haven't succeeded.",
+ say:`<ul><li>Goal 20→35%: I want to know they converted <strong>because of</strong> the journey</li><li>Treatment vs holdout → <strong>incremental conversion</strong> is the north star</li><li>Assumption: paid purchase in the window. I'd align it with the team</li><li>Don't wait six months: the funnel shows early <strong>where</strong> it breaks</li><li>Appointments but no sale → not another CRM message. Take the evidence to Sales and Product</li><li><strong>Proving ground</strong>, not the whole answer. 35% is across the base, via the next cohorts</li><li>No lift vs holdout → change it or stop</li></ul>`,
+ qa:[["Keep these two questions separate","Can this journey take this cohort from 20 to 35%? The experiment answers that. Can the programme take the 700k base to 35%? Scaling answers that. Never imply one from the other."],
+ ["How big is the holdout?","Sized from the eligible audience, the baseline, and the smallest effect we'd consider commercially meaningful. Calculated once the cohort size is validated, not an arbitrary 10%. <b>Sense check:</b> detecting ~3 points absolute from a 20% baseline needs roughly 3,000 per arm at conventional power. So the test can detect far smaller movement than the +15 point ambition, and the holdout can stay small."],
+ ["Why hold anyone out with an aggressive target?","Without a comparison group I can't tell whether we created conversion or just claimed customers who'd have bought anyway. The holdout is only as large and lasts only as long as we need to learn reliably."],
+ ["Why not all 700k now?","I'd be spending money, consultant capacity and trust before knowing which proposition works. Learn fast on a commercially meaningful audience, then scale fast from evidence."],
+ ["When is the first read?","Operational and behavioural signals monitored from day one. A first structured review at around 6 weeks is a decision point, not a statistical promise. The cadence depends on response volume and how long purchases take."],
+ ["Cohort timing","Measure conversion from each customer's entry date over a consistent window, so later waves aren't penalised for having less time to buy."],
+ ["What if it's 28%, not 35%?","Look at incremental lift, the economics, and which funnel stage is the constraint. A meaningful lift can justify scaling while we fix the weak point. I wouldn't call the first version a failure for not delivering all 15 points at once."],
+ ["Engagement up, conversion flat?","Then engagement hasn't achieved the objective. Use the funnel to find where intent is lost and change that part, rather than optimising opens or clicks."],
+ ["Revenue or conversion?","The brief gives conversion, so it's the primary measure here. In the real business I'd track incremental revenue, margin and cost-to-serve alongside it. 35% isn't valuable if it's uneconomic."],
+ ["What would you test inside treatment?","Big questions only: life-change vs LPA proposition for letter 2, and phone-first vs QR-first response. Not subject lines."],
+ ["Isn't post expensive (CPA)?","Track cost per <b>incremental</b> conversion, not cost per send. Contact caps and taking the Ready and Protect groups out of marketing keep it efficient."],
+ ["Attribution across channels?","The holdout answers the north-star question. Channel tests inside treatment answer channel questions."]]},
+
+{t:80,land:"Reassure, make it relevant, ask one thing.",
+ say:`<ul><li>This is what I'd actually send. A <strong>statement</strong>, because storage is the real relationship</li><li>Envelope: the <strong>old provider's name</strong>, the one they recognise</li><li>First job: reassurance. Safe, still free</li><li>Then relevance: <em>your will, 13 years on</em></li><li>One ask: is it still right for your life today?</li><li>Scam footer: <em>don't trust the number we printed. Find us yourself.</em></li><li>We know property and executors, and <strong>chose not to show them</strong></li></ul>`,
+ qa:[["Why not lead with LPA?","We don't know they lack one. LPA becomes relevant after the Will Check: \"you told us you're not sure what an LPA is.\""],
+ ["Why the old provider's name?","Recognition drives opens for an audience that doesn't know us. Subject to the legal and brand agreement from the acquisition."],
+ ["Isn't 'Private & confidential' alarming?","It signals importance and keeps the content private from others in the household. I'd test it against a plainer envelope."],
+ ["Accessibility?","Large type (min 12–14pt in print), high contrast, plain English, and the phone route first for anyone who doesn't use QR codes."],
+ ["What if the address is stale?","Returned post is itself a signal. It goes to a data-hygiene flow, or an alternative channel where we have permission."],
+ ["Couples on mirror wills?","Individual statements unless the household is verified. Same principle as 'what we won't assume'."]]},
+
+{t:50,land:"Having a data point doesn't mean we've earned the right to show it.",
+ say:`<ul><li>Three routes: online is 5 questions, phone is adviser-led, the card is just a <strong>hand-raise</strong></li><li>Not asking anyone to put sensitive plans on a postcard</li><li><strong>Need vs readiness</strong>: Q1–4 need, Q5 readiness → Ready or Interested</li><li>Bottom strip: data that selects ≠ data we show</li></ul>`,
+ qa:[["Why only 5 questions?","Completion matters more than completeness. The consultant conversation gathers the detail. The check only needs to route people and prove intent."],
+ ["What happens to 'No, I'm happy'?","They're thanked and move to the long-term rhythm. That's a valid answer, not a failure, and it counts as an engaged signal for next year's statement."],
+ ["Is asking about LPA a sales question?","It's a genuine planning question, explained in plain English. It only becomes a proposition if they tell us they don't have one."]]},
+
+{t:115,land:"The customer makes the introduction.",
+ say:`<ul><li>A choice I <strong>wouldn't</strong> make: take executor and beneficiary data and market to them</li><li>They didn't give us their details</li><li>Instead <em>the customer makes the introduction</em></li><li>Before the box: three things (point at the list)</li><li>Today they hear nothing after delivery → first follow-up: <em>have you shared your cards?</em></li><li>Land: <strong>not a cold lead, but a permissioned relationship built on the customer's trust</strong></li></ul>`,
+ qa:[["Isn't this slow vs emailing 300k named people?","Those people haven't given their details to us themselves, and I wouldn't assume they expect marketing from us. More importantly, prospecting them directly risks undermining the trust of the customer who named them, someone who just paid £1,199+. A customer-led introduction is the version that scales without that risk."],
+ ["What if customers don't hand them out?","That's the main risk. Hence the consultant mention, the pre-delivery message, the follow-up nudge and the digital share option. Card activation tells us quickly."],
+ ["When does the 'have you shared?' nudge go?","Test hypothesis: triggered from delivery confirmation, somewhere in the first few weeks, then tuned on observed activation."],
+ ["How do you measure the first-call benefit?","We can't know if we were literally the first call. So measure what's attributable: contacts arriving via a card's family reference, executor and probate support engagement, card-holders vs not. Ultimately it makes it more likely Octopus is the family's call when support is needed."],
+ ["Executor vs beneficiary?","The card avoids saying which. The landing page lets them choose."]]},
+
+{t:85,land:"The most important copy on this card isn't written by CRM.",
+ say:`<ul><li>The actual intervention. Three cards, about three named people on average</li><li>Front: "To / From" in the customer's hand</li><li>Inside: practical, plus their own note</li><li>Back: <strong>who to call</strong> + family reference → we become the family's call</li><li>QR → a guide; they choose executor or wider plan</li><li>The reference tells us the introduction happened, <strong>not their role or the estate</strong></li><li>Family benefit only after they engage</li></ul>`,
+ qa:[["QR / reference privacy?","Each card has a unique, non-sensitive ID that maps internally to the originating customer. It's never the customer's storage reference, and it never encodes role or estate contents."],
+ ["Why physical, not digital?","It lives in a physical, emotional product next to the existing conversation cards. There's a digital share link for customers who'd rather send it."],
+ ["Why lead with no offer?","A discount on the first contact would turn an introduction from a loved one into a sales lead. The family benefit (10% Classic / 20% Premier) appears only after they engage."],
+ ["Can you say 'you won't be added to marketing'?","That line needs privacy and legal sign-off, but it addresses the elephant in the room, so I'd fight to keep it."]]},
+
+{t:60,land:"Useful for speed. Weak on judgement. The decisions were mine.",
+ say:`<ul><li>Used AI extensively, mainly as a <strong>challenger</strong>: generate, then try to break it</li><li>Example: a confident ~90k audience from percentages the brief doesn't give. Caught and removed</li><li>Good at speed and pressure-testing</li><li>Worse at privacy judgement, operational reality, and knowing when <em>not</em> to use data</li><li>If asked about time: <strong>give the real number</strong></li></ul>`,
+ qa:[["How long did you spend?","⚠ <b>Answer honestly with your real time.</b> Don't claim 4 hours if it isn't true. Separate AI-assisted exploration from actual case-study production, accurately."],
+ ["Would you use AI in the role?","Yes: for generating variants, QA of journeys and copy against brand and compliance checklists, first drafts of analysis, and challenging plans. Not for final customer copy in a category this sensitive without human and content review."],
+ ["Did AI write the copy?","First drafts, yes. The decisions in it (what not to say, what data not to use, the scam-proof footer) came from challenging it."]]},
+
+{t:10,land:"Stop talking. Invite questions.",
+ say:`<ul><li>Use the relationship and data we have, <strong>without overreaching</strong> with either</li><li>A useful reason for the next step → watch what they tell us and do → earn the next conversation</li><li>"Happy to dig into any of it." Then stop.</li></ul><p style="margin-top:18px"><strong>Questions for them (pick 3):</strong></p>
+<p>1. You said lifecycle hasn't really been owned until now. What would you most want this person to change first?<br>2. What's already been tried with acquired customers, and what did you learn?<br>3. As the function grows, how do you see lifecycle working with Brand, Creative, Product and Data?<br>4. Can we trigger from offline moments today, like appointments, box delivery or returned post?<br>5. Who would I work most closely with on copy and content?</p>
+<p><strong>⚠ Never say "Octopus Energy". It's Octopus Group.</strong></p>`,
+ qa:[]}
+];
+
+/* ═════════ fake-but-plausible QR codes ═════════ */
+function rng(s){return function(){s=(s*9301+49297)%233280;return s/233280}}
+document.querySelectorAll('svg.qr').forEach(svg=>{
+  const n=25,sz=+svg.getAttribute('width'),c=sz/n,r=rng(+svg.dataset.seed||1);let h='';
+  const fin=(x,y)=>{h+=`<rect x="${x*c}" y="${y*c}" width="${7*c}" height="${7*c}" fill="#261842"/><rect x="${(x+1)*c}" y="${(y+1)*c}" width="${5*c}" height="${5*c}" fill="#fff"/><rect x="${(x+2)*c}" y="${(y+2)*c}" width="${3*c}" height="${3*c}" fill="#261842"/>`};
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){const inF=(x<8&&y<8)||(x>16&&y<8)||(x<8&&y>16);if(!inF&&r()>.52)h+=`<rect x="${x*c}" y="${y*c}" width="${c+.2}" height="${c+.2}" fill="#261842"/>`}
+  fin(0,0);fin(18,0);fin(0,18);svg.innerHTML=h;
+});
+
+/* ═════════ deck engine ═════════ */
+const S=[...document.querySelectorAll('.slide')],stage=document.getElementById('stage');
+let i=Math.max(0,Math.min(S.length-1,(parseInt(location.hash.slice(1))||1)-1));
+function fit(){const vp=document.getElementById('viewport').getBoundingClientRect();stage.style.transform=`scale(${Math.min(vp.width/1600,vp.height/900)})`}
+addEventListener('resize',fit);
+const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+function payload(k){const n=N[k]||{},qa=(n.qa||[]).map(([q,a])=>`<dt>${q}</dt><dd>${a}</dd>`).join('');
+  return{title:S[k].dataset.title,num:k+1,total:S.length,b:n.t?fmt(n.t):'',land:n.land?`<div class="land"><i>Line to land</i>${n.land}</div>`:'',say:n.say||'',
+  extra:qa?`<div class="qa"><div class="l">Q&amp;A pocket</div><dl>${qa}</dl></div>`:'',next:S[k+1]?S[k+1].dataset.title:'End'}}
+function show(k){i=Math.max(0,Math.min(S.length-1,k));S.forEach((s,j)=>s.classList.toggle('active',j===i));
+  history.replaceState(null,'','#'+(i+1));document.getElementById('prog').style.width=((i+1)/S.length*100)+'%';
+  closeZoom();const d=payload(i);
+  document.getElementById('notes').innerHTML=`<h3>${d.title}</h3><div class="pos">Slide ${d.num}/${d.total}${d.b?' · budget '+d.b:''}</div>${d.land}<div class="say">${d.say}</div>${d.extra}`;
+  if(pw&&!pw.closed&&pw.__r)pw.__r(d);document.getElementById('notes').scrollTop=0;}
+window.show=show;window.cur=()=>i;
+
+/* zoom */
+const Z=document.getElementById('zoom'),ZH=Z.querySelector('.holder');
+document.querySelectorAll('.zoomable').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();
+  ZH.innerHTML='';const c=el.cloneNode(true);c.classList.remove('zoomable');ZH.appendChild(c);
+  const w=el.offsetWidth,h=el.offsetHeight,sc=Math.min(1450/w,800/h,2.4);ZH.style.width=w+'px';ZH.style.height=h+'px';ZH.style.transform=`scale(${sc})`;Z.classList.add('on')}));
+function closeZoom(){Z.classList.remove('on')}Z.addEventListener('click',closeZoom);
+
+/* keys */
+document.addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key.toLowerCase();
+  if(k==='escape'&&Z.classList.contains('on')){closeZoom();return}
+  if(['arrowright','pagedown',' ','n'].includes(k)){e.preventDefault();show(i+1)}
+  else if(['arrowleft','pageup','b'].includes(k)){e.preventDefault();show(i-1)}
+  else if(k==='home')show(0);else if(k==='end')show(S.length-1);
+  else if(k==='s'){document.body.classList.toggle('notes');document.documentElement.style.setProperty('--dock',document.body.classList.contains('notes')?'440px':'0px');setTimeout(fit,260)}
+  else if(k==='v'||k==='p')openPresenter();
+  else if(k==='f')toggleFS()});
+function toggleFS(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}window.toggleFS=toggleFS;
+let mt=null;addEventListener('mousemove',()=>{document.body.classList.add('mouse');clearTimeout(mt);mt=setTimeout(()=>document.body.classList.remove('mouse'),2200)});
+let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX);addEventListener('touchend',e=>{if(tx==null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(i+(d<0?1:-1));tx=null});
+
+/* ═════════ presenter window: deck on the shared screen, notes on your laptop ═════════ */
+let pw=null,t0=null;
+window.resetTimer=()=>{t0=Date.now()};
+function openPresenter(){
+  if(pw&&!pw.closed){pw.focus();return}
+  pw=window.open('','ol-presenter','width=980,height=820');
+  if(!pw){alert('Popup blocked. Allow popups, then press V again.');return}
+  const total=N.reduce((a,n)=>a+(n.t||0),0);
+  pw.document.open();pw.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Presenter · Octopus Legacy</title>
+<style>
+@font-face{font-family:Figtree;src:url(fonts/Figtree-400.ttf);font-weight:400}@font-face{font-family:Figtree;src:url(fonts/Figtree-700.ttf);font-weight:700}@font-face{font-family:Figtree;src:url(fonts/Figtree-800.ttf);font-weight:800}
+*{box-sizing:border-box}body{margin:0;font-family:Figtree,system-ui,sans-serif;background:#140B26;color:#ECE7F7;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:1px solid #2A2142;flex:none}
+.wm{font-weight:800;color:#F2C9A0}#t{font-family:ui-monospace,monospace;font-size:24px;font-variant-numeric:tabular-nums}#t.over{color:#FF6B6B}
+#b,#tot{font-family:ui-monospace,monospace;font-size:12px;color:#9A8FB8;background:rgba(255,255,255,.06);padding:4px 9px;border-radius:5px}
+.sp{flex:1}button{font:inherit;font-size:12px;font-weight:700;cursor:pointer;background:#1D1533;color:#CFC5EA;border:1px solid #3A2E5C;padding:6px 13px;border-radius:999px}button:hover{border-color:#F2C9A0;color:#fff}
+main{flex:1;overflow-y:auto;padding:22px 30px 40px;max-width:900px}
+h1{font-size:22px;margin:0 0 3px}.pos{font-size:11px;color:#7E73A0;font-family:ui-monospace,monospace;margin-bottom:16px}
+.land{background:rgba(242,201,160,.1);border-left:3px solid #F2C9A0;padding:11px 14px;border-radius:0 8px 8px 0;margin-bottom:18px;font-size:15px;font-weight:700;color:#fff}
+.land i{font-style:normal;display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#F2C9A0;margin-bottom:4px}
+.say{font-size:19px;line-height:1.5}.say p{margin:0 0 14px}.say ul{margin:0;padding-left:22px}.say li{margin-bottom:11px}.say em{color:#F2C9A0;font-style:normal;font-weight:700}.say strong{color:#fff}
+.qa{margin-top:22px;background:#17112A;border-radius:12px;padding:16px 18px}.qa .l{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#B9A9F5;margin-bottom:8px}
+.qa dt{font-weight:700;color:#fff;margin-top:12px;font-size:15px}.qa dt:first-of-type{margin-top:0}.qa dd{margin:3px 0 0;color:#C3B9DD;font-size:14.5px;line-height:1.55}.qa b{color:#fff}
+footer{flex:none;padding:11px 26px;border-top:1px solid #2A2142;font-size:13px;color:#8C80A8}footer b{color:#ECE7F7}
+</style></head><body>
+<header><div class="wm">octopus legacy · presenter</div><div id="t">00:00</div><div id="b">—</div><div id="tot">deck ${fmt(total)}</div><div class="sp"></div>
+<button onclick="opener.resetTimer()">Reset timer</button><button onclick="opener.show(opener.cur()-1)">←</button><button onclick="opener.show(opener.cur()+1)">→</button></header>
+<main><h1 id="h"></h1><div class="pos" id="p"></div><div id="l"></div><div class="say" id="s"></div><div id="x"></div></main>
+<footer>Next: <b id="n"></b> · ← → drive both windows</footer>
+<script>
+document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey)return;var k=e.key.toLowerCase();
+if(['arrowright','pagedown',' ','n'].indexOf(k)>-1){e.preventDefault();opener.show(opener.cur()+1)}
+else if(['arrowleft','pageup','b'].indexOf(k)>-1){e.preventDefault();opener.show(opener.cur()-1)}});
+window.__r=function(d){document.getElementById('h').textContent=d.title;document.getElementById('p').textContent='Slide '+d.num+' of '+d.total+(d.b?'  ·  budget '+d.b:'');
+document.getElementById('l').innerHTML=d.land;document.getElementById('s').innerHTML=d.say;document.getElementById('x').innerHTML=d.extra;
+document.getElementById('b').textContent=d.b||'—';document.getElementById('n').textContent=d.next;document.querySelector('main').scrollTop=0};
+setInterval(function(){var t0=opener.__t0();if(!t0)return;var s=Math.floor((Date.now()-t0)/1000);var el=document.getElementById('t');
+el.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');el.className=s>900?'over':''},500);
+<\/script></body></html>`);
+  pw.document.close();
+  if(!t0)t0=Date.now();
+  setTimeout(()=>show(i),150);
+}
+window.__t0=()=>t0;
+
+fit();show(i);document.querySelector('#notes').scrollTop=0;setTimeout(()=>document.getElementById('hint').style.opacity=0,5000);
+</script>
+</body>
+</html>
